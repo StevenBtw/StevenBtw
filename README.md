@@ -1,4 +1,4 @@
-# Hi there, I'm Steven by the way!
+# Hi there! I'm Steven, by the way. 
 
 ## About Me
 ⚗️ This is my personal github for publishing side projects and experiments.
@@ -9,5 +9,5 @@
 
 🌱 Mostly Python, learning Rust.
 
-But enough about me
+🔚 But enough about me. 
 
