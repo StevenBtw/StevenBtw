@@ -9,5 +9,5 @@
 
 🌱 Mostly Python, learning Rust.
 
-🔚 But enough about me. 
+🔚 But enough About Me. 
 
