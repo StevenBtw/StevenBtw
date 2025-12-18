@@ -5,8 +5,10 @@
 
 💻  Recreational programmer who enjoys building things and learning by doing. 
 
-🔭 Currently working on a tool to generate consistent ArchiMate models using heuristics, knowledge graphs and AI. Will open source this soon! 
+🔭 Currently working on a tool to generate consistent ArchiMate models using heuristics, knowledge graphs and AI.
 
 🌱 Mostly Python, learning Rust.
+
+🥏 In the process of updating and publishing some old and new projects. 
 
 🔚 But enough About Me. 
