@@ -7,7 +7,7 @@
 
 🔭 Currently working on a tool to generate consistent ArchiMate models using heuristics, knowledge graphs and AI.
 
-🥏 And the process of updating and publishing some (local) old and new projects to github.  
+🥏 And in the process of updating and publishing some (local) old and new projects to github.  
 
 🌱 Mostly Python, learning Rust.
 
