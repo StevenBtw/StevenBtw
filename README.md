@@ -1,7 +1,8 @@
 # Hi there! I'm Steven, by the way.
 
+This is my personal GitHub for side projects and experiments. 
+
 ## About Me
-⚗️ Personal GitHub for side projects and experiments.
 
 💻 Recreational programmer. I code to learn and for fun, not for work.
 
