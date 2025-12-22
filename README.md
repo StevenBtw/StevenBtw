@@ -1,12 +1,12 @@
-# Hi there! I'm Steven, by the way. 
+# Hi there! I'm Steven, by the way.
 
 ## About Me
-⚗️ This is my personal github for managing side projects and experiments.
+⚗️ Personal GitHub for side projects and experiments.
 
-💻  Recreational programmer who enjoys building things and learning by doing. 
+💻 Recreational programmer. I code for fun, not for work.
 
-🔭 Currently working on a tool to generate consistent ArchiMate models using heuristics, knowledge graphs and AI.
+🔭 Interested in data science, operations research, robotics, and (home) automation.
 
 🌱 Mostly Python, learning Rust.
 
-🔚 But enough About Me. 
+🔚 But enough About Me.
