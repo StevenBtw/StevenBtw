@@ -13,13 +13,13 @@ This is my personal GitHub for side projects and experiments.
 🔚 But enough About Me.
 
 
-## Favorite Projects atm
+## Favorite Projects right now
 
-**[Marimo](https://marimo.io/):** Next-gen Python notebooks that are reactive and interactive. Think of a modern Jupyter, but on steroids. 
+🔁 **[Marimo](https://marimo.io/):** Next-gen Python notebooks that are reactive and interactive. Think of a modern Jupyter, but on steroids. 
 
-**[UV](https://github.com/astral-sh/uv):** If you are still using pip, try this! UV is super fast, more feature-complete, and the future of Python package management.
+⚡ **[UV](https://github.com/astral-sh/uv):** If you are still using pip, try this! UV is super fast, more feature-complete, and the future of Python package management.
 
-**[AutoMate](https://github.com/StevenBtw/AutoMate):** My own project for generating consistent ArchiMate models using knowledge graphs, heuristics, and AI.
+🗺️ **[AutoMate](https://github.com/StevenBtw/AutoMate):** My own project for generating consistent ArchiMate models using knowledge graphs, heuristics, and AI.
 
-**[Pydantic AI](https://ai.pydantic.dev/):** Type-safe AI agent framework that doesn't bury you in unnecessary abstractions.
+🧬 **[Pydantic AI](https://ai.pydantic.dev/):** Type-safe AI agent framework that doesn't bury you in unnecessary abstractions.
 
