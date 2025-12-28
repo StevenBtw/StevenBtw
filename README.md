@@ -23,3 +23,4 @@ This is my personal GitHub for side projects and experiments.
 
 🧬 **[Pydantic AI](https://ai.pydantic.dev/):** Type-safe AI agent framework that doesn't bury you in unnecessary abstractions.
 
+🧮 **[solvOR](https://github.com/StevenBtw/solvOR):** A side project that got out of hand. Optimization toolbox covering everything from simplex to simulated annealing, all in readable pure Python.
