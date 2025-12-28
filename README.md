@@ -22,5 +22,3 @@ This is my personal GitHub for side projects and experiments.
 🗺️ **[AutoMate](https://github.com/StevenBtw/AutoMate):** My own project for generating consistent ArchiMate models using knowledge graphs, heuristics, and AI.
 
 🧬 **[Pydantic AI](https://ai.pydantic.dev/):** Type-safe AI agent framework that doesn't bury you in unnecessary abstractions.
-
-🧮 **[solvOR](https://github.com/StevenBtw/solvOR):** A side project that got out of hand. Optimization toolbox covering everything from simplex to simulated annealing, all in readable pure Python.
