@@ -15,9 +15,9 @@ This is my personal GitHub for side projects and experiments.
 
 ## Favorite Projects right now
 
-🔁 **[Marimo](https://marimo.io/):** Next-gen Python notebooks that are reactive and interactive. Think of a modern Jupyter, but on steroids. 
+⚡ **[UV](https://github.com/astral-sh/uv):** If you are still using pip, try this! UV is super fast, more feature-complete, and also check ruff (linter) and ty (type checker) from Astral.
 
-⚡ **[UV](https://github.com/astral-sh/uv):** If you are still using pip, try this! UV is super fast, more feature-complete, and also check the ruff (linter and ty (type checker).
+🔁 **[Marimo](https://marimo.io/):** Next-gen Python notebooks that are reactive and interactive. Think of a modern Jupyter, but on steroids. 
 
 🗺️ **[AutoMate](https://github.com/StevenBtw/AutoMate):** My own project for generating consistent ArchiMate models using knowledge graphs, heuristics, and AI.
 
