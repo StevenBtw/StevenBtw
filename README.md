@@ -15,7 +15,7 @@ This is my personal GitHub for side projects and experiments.
 
 ## Favorite Projects right now
 
-⚡ **[UV](https://github.com/astral-sh/uv):** If you are still using pip, try this! UV is super fast, more feature-complete, and also check ruff (linter) and ty (type checker) from Astral.
+⚡ **[UV](https://github.com/astral-sh/uv):** If you are still using pip, try this! UV is super fast, more feature-complete, and also check their linter (ruff) and type checker (ty).
 
 🔁 **[Marimo](https://marimo.io/):** Next-gen Python notebooks that are reactive and interactive. Think of a modern Jupyter, but on steroids. 
 
