@@ -19,6 +19,6 @@ This is my personal GitHub for side projects and experiments.
 
 🔁 **[Marimo](https://marimo.io/):** Next-gen Python notebooks that are reactive and interactive. Think of a modern Jupyter, but on steroids. 
 
-🗺️ **[Deriva](https://github.com/StevenBtw/Deriva):** My own project for deriving consistent ArchiMate models using knowledge graphs, heuristics, and AI.
+🗺️ **[Deriva](https://github.com/StevenBtw/Deriva):** My own project for deriving consistent ArchiMate models using knowledge graphs, heuristics, and LLM's.
 
 🧬 **[Pydantic AI](https://ai.pydantic.dev/):** Type-safe AI agent framework that doesn't bury you in unnecessary abstractions.
