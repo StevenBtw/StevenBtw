@@ -15,7 +15,7 @@ This is my personal GitHub for side projects and experiments.
 
 ## Favorite Projects right now
 
-⚡ **[UV](https://docs.astral.sh/uv/):** If you are still using pip, try this! UV is super fast and very versatile. Also check their linter (ruff) and type checker (ty).
+⚡ **[UV](https://docs.astral.sh/uv/):** If you are still using pip, try this! UV is super fast and very versatile. Also check their linter (Ruff) and type checker (ty).
 
 🗺️ **[Deriva](https://github.com/StevenBtw/deriva):** My own project for deriving consistent ArchiMate models using knowledge graphs, heuristics, and LLM's. 
 
