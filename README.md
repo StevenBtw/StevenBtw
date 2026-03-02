@@ -1,5 +1,5 @@
 # Hi there! I'm Steven, by the way.
-This is my personal GitHub for side projects and experiments. Currently tinkering with architecture modeling automation and applying graph data in the AI space, making AI more grounded.
+This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation and building a graph database ecosystem.
 
 ## About Me
 
