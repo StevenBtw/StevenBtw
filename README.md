@@ -1,9 +1,9 @@
 # Hi there! I'm Steven, by the way.
-This is my personal GitHub for side projects and experiments. Currently tinkering with automating EA work and applying graph data in the AI space, making AI more factual and deterministic.
+This is my personal GitHub for side projects and experiments. Currently tinkering with architecture modeling automation and applying graph data in the AI space, making AI more grounded.
 
 ## About Me
 
-💻 Recreational programmer. I code in evenings and weekends to tinker, to build and to learn. Not for my work/job.
+💻 Recreational programmer. I code in evenings and weekends to create and to learn.
 
 🔭 Interested in data science, operations research, robotics and (home) automation.
 
