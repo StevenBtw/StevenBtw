@@ -15,7 +15,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 🗺️ **[Deriva](https://github.com/StevenBtw/deriva):** Deriving consistent ArchiMate models using (dual) knowledge graphs, heuristics and LLMs.
 
-🦀 **[Grafeo](https://github.com/GrafeoDB/grafeo):** A pure-Rust embeddable graph database with Python bindings, supporting both LPG and RDF data models.
+🦀 **[Grafeo](https://github.com/GrafeoDB/grafeo):** A pure-Rust embeddable [graph database](https://grafeo.ai/) with Python bindings, supporting both LPG and RDF data models.
 
 🧠 **[Grafeo Memory](https://github.com/GrafeoDB/grafeo-memory):** Graph-powered memory for AI agents, structured, queryable and grounded.
 
