@@ -14,13 +14,13 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ## My Projects
 
 <pre>
-┣━━ 🏗️ <b>Architecture & Research</b>
+┣━━ 🗺️ <b>Architecture & Research</b>
 ┃   ┣━━ <a href="https://github.com/StevenBtw/deriva">deriva</a>              - ArchiMate model derivation
 ┃   ┗━━ <a href="https://github.com/StevenBtw/anywidget-archimate">anywidget-archimate</a> - ArchiMate viewer for notebooks
-┣━━ 🧮 <b>Optimization</b>
+┣━━ 📉 <b>Optimization</b>
 ┃   ┣━━ <a href="https://github.com/StevenBtw/solvOR">solvOR</a>              - Pure Python optimization solvers
 ┃   ┗━━ <a href="https://github.com/StevenBtw/benchmORk">benchmORk</a>           - OR solver benchmarking
-┣━━ 📊 <b>Grafeo Ecosystem</b>
+┣━━ 🎡 <b>Grafeo Ecosystem</b>
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo">grafeo</a>              - Embeddable graph database
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-server">grafeo-server</a>       - HTTP server & web UI
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-web">grafeo-web</a>          - Browser-based via WASM
