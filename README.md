@@ -1,5 +1,5 @@
 # Hi there! I'm Steven, by the way.
-This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation and building a graph database ecosystem.
+This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and building a graph database ecosystem.
 
 ## About Me
 
@@ -33,7 +33,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/gql-wire-protocol">gwp</a>                 - GQL Wire Protocol (gRPC)
 ┃   ┗━━ <a href="https://github.com/GrafeoDB/boltr">boltr</a>               - Bolt v5.x wire protocol
 ┣━━ 🔪 <b>Cookiecutters</b>
-┃   ┣━━ <a href="https://github.com/StevenBtw/agent-framework-cookiecutter">agent-framework-cookiecutter</a> - Microsoft Agent Framework template
+┃   ┣━━ <a href="https://github.com/StevenBtw/agent-framework-cookiecutter">agent-framework</a> - Microsoft Agent Framework template
 ┗━━ 🗄️ <b>Archived</b>
     ┣━━ <a href="https://github.com/StevenBtw/AoC_2025">AoC_2025</a>            - Advent of Code, one tool per day
     ┣━━ <a href="https://github.com/StevenBtw/aoc_helper">aoc_helper</a>          - AoC helper scripts
