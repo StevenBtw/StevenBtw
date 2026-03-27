@@ -14,7 +14,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ## My Projects
 
 <pre>
-┣━━ 🗺️ <b>Architecture & Research</b>
+┏━━ 🗺️ <b>Architecture & Research</b>
 ┃   ┣━━ <a href="https://github.com/StevenBtw/deriva">deriva</a>              - ArchiMate model derivation
 ┃   ┗━━ <a href="https://github.com/StevenBtw/anywidget-archimate">anywidget-archimate</a> - ArchiMate viewer for notebooks
 ┣━━ 📉 <b>Optimization</b>
@@ -30,8 +30,8 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-llamaindex">grafeo-llamaindex</a>   - LlamaIndex integration
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-graph">anywidget-graph</a>     - Graph visualization for notebooks
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-vector">anywidget-vector</a>    - 3D vector visualization
-┃   ┣━━ <a href="https://github.com/GrafeoDB/gql-wire-protocol">gwp</a>                 - GQL Wire Protocol (gRPC)
-┃   ┗━━ <a href="https://github.com/GrafeoDB/boltr">boltr</a>               - Bolt v5.x wire protocol
+┃   ┣━━ <a href="https://github.com/GrafeoDB/boltr">boltr</a>               - Bolt v5.x wire protocol
+┃   ┗━━ <a href="https://github.com/GrafeoDB/gql-wire-protocol">gwp</a>                 - GQL Wire Protocol (gRPC)
 ┣━━ 🔪 <b>Cookiecutters</b>
 ┃   ┣━━ <a href="https://github.com/StevenBtw/agent-framework-cookiecutter">agent-framework</a>     - Microsoft Agent Framework template
 ┗━━ 🗄️ <b>Archived</b>
