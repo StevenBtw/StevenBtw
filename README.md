@@ -36,7 +36,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ┃   ┗━━ <a href="https://github.com/GrafeoDB/gql-wire-protocol">gwp</a>                 - GQL Wire Protocol (gRPC)
 ┃     
 ┣━━ 🔪 <b>Cookiecutters</b>
-┃   ┣━━ <a href="https://github.com/StevenBtw/agent-framework-cookiecutter">agent-framework</a>     - Microsoft Agent Framework template
+┃   ┗━━ <a href="https://github.com/StevenBtw/agent-framework-cookiecutter">agent-framework</a>     - Microsoft Agent Framework template
 ┃     
 ┗━━ 🗄️ <b>Archived</b>
     ┣━━ <a href="https://github.com/StevenBtw/AoC_2025">AoC_2025</a>            - Advent of Code, one tool per day
