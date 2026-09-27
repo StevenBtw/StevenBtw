@@ -3,11 +3,11 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 ## About Me
 
-💻 Recreational programmer. I code in evenings and weekends to create and to learn.
+💻 Recreational programmer. I build and learn in my spare time (at work I drink coffee and diagram exclusively).
 
-🔭 Interested in data science, operations research, robotics and (home) automation.
+🔭 Interested in architecture, optimization, robotics and (home) automation.
 
-🌱 Mostly Python, learning Rust.
+🌱 Mostly Python and Rust.
 
 🔚 But enough **About Me**.
 
