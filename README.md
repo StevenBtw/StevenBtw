@@ -1,9 +1,9 @@
 # Hi there! I'm Steven, by the way.
-This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and building a graph database ecosystem.
+This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and building a graph database ecosystem. 
 
 ## About Me
 
-💻 Recreational programmer. I build and learn in my spare time (at work I drink coffee and diagram exclusively).
+💻 Recreational programmer. I code for fun, to build and learn. 
 
 🔭 Interested in architecture, optimization, robotics and (home) automation.
 
