@@ -14,8 +14,8 @@ from datetime import date, timedelta
 
 USER_AGENT = "StevenBtw-profile-downloads (+https://github.com/StevenBtw/StevenBtw)"
 
-# Fixed bar and legend order, chosen with the dataviz palette validator (see the spec).
-ORDER = ("pypi", "crates", "docker", "nuget", "npm")
+# Fetch order. The card sorts registries by downloads; this order only breaks ties.
+ORDER =("pypi", "crates", "docker", "nuget", "npm")
 LABELS = {"pypi": "PyPI", "crates": "crates.io", "docker": "Docker", "nuget": "NuGet", "npm": "npm"}
 
 # Registries that only publish an all-time total; their 30-day number comes from history snapshots.

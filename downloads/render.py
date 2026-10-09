@@ -27,10 +27,11 @@ THEMES = {
     "dark": {"bg": "#151b23", "text": "#f0f6fc", "muted": "#9198a1"},
 }
 
-# Validated categorical palette slots per registry (see the spec's "Registry colours").
+# Validated categorical palette slots per registry. The card sorts registries by size, so these were checked
+# for every pair that can end up side by side (all except PyPI next to Docker or NuGet), in both themes.
 COLORS = {
-    "light": {"pypi": "#2a78d6", "crates": "#eda100", "docker": "#1baf7a", "nuget": "#4a3aa7", "npm": "#e34948"},
-    "dark": {"pypi": "#3987e5", "crates": "#c98500", "docker": "#199e70", "nuget": "#9085e9", "npm": "#e66767"},
+    "light": {"pypi": "#2a78d6", "crates": "#eda100", "npm": "#e87ba4", "docker": "#008300", "nuget": "#4a3aa7"},
+    "dark": {"pypi": "#3987e5", "crates": "#c98500", "npm": "#d55181", "docker": "#008300", "nuget": "#9085e9"},
 }
 
 
@@ -62,7 +63,8 @@ def format_delta(n: int | None) -> str:
 
 
 def render_card(stats: list[RegistryStat], updated: date, theme: str) -> str:
-    """The card for one theme ("light" or "dark"). Registries are drawn in the order given."""
+    """The card for one theme ("light" or "dark"). Registries are drawn largest first; ties keep the given order."""
+    stats = sorted(stats, key=lambda s: -s.total)
     palette, colors = THEMES[theme], COLORS[theme]
     total = sum(s.total for s in stats)
     known = [s.last30 for s in stats if s.last30 is not None]

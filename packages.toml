@@ -1,7 +1,7 @@
 # Packages counted on the profile downloads card.
-# Only list packages people install directly: no internal workspace crates
-# (grafeo-common, grafeo-core, ...) and no per-platform npm binaries
-# (@grafeo-db/js-linux-x64-gnu, ...), because the main package pulls those in.
+# Only list packages people install directly.
+# the per-platform npm binaries (@grafeo-db/js-linux-x64-gnu, ...) are not, because
+# the main package pulls those in.
 
 pypi = [
   "grafeo",
@@ -16,7 +16,7 @@ pypi = [
   "solvor",
   "gwp-py",
 ]
-crates = ["grafeo", "grafeo-cli", "boltr", "gwp"]
+crates = ["grafeo", "grafeo-core", "grafeo-cli", "boltr", "gwp"]
 docker = ["grafeo/grafeo-server"]
 nuget = ["Grafeo"]
 npm = [

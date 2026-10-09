@@ -85,9 +85,9 @@ def test_card_has_no_scripts_external_resources_or_em_dashes():
     assert "\u2014" not in svg
 
 
-def test_legend_is_one_row_in_the_given_order():
+def test_legend_is_one_row_largest_first():
     svg = render_card(STATS, date(2026, 10, 11), "light")
-    order = ["PyPI", "crates.io", "Docker", "NuGet", "npm"]
+    order = ["PyPI", "npm", "crates.io", "NuGet", "Docker"]  # 812K, 201K, 150K, 22K, 15K
     root = ET.fromstring(svg)
     labels = [t for t in root.iter(f"{SVG}text") if t.text in order]
     assert [t.text for t in labels] == order
@@ -95,6 +95,18 @@ def test_legend_is_one_row_in_the_given_order():
     xs = [float(t.get("x")) for t in labels]
     steps = {round(b - a, 2) for a, b in zip(xs, xs[1:])}
     assert len(steps) == 1 and steps.pop() > 0  # evenly spaced, left to right
+
+
+def test_equal_totals_keep_the_given_order():
+    stats = [RegistryStat("nuget", "NuGet", 10, None), RegistryStat("docker", "Docker", 10, None)]
+    shown = [t for t in texts(render_card(stats, date(2026, 10, 11), "light")) if t in {"NuGet", "Docker"}]
+    assert shown == ["NuGet", "Docker"]
+
+
+def test_registry_colours_are_the_validated_palette_slots():
+    # Checked with the dataviz validator for every pair that can end up side by side once sorted by size.
+    assert COLORS["light"] == {"pypi": "#2a78d6", "crates": "#eda100", "npm": "#e87ba4", "docker": "#008300", "nuget": "#4a3aa7"}
+    assert COLORS["dark"] == {"pypi": "#3987e5", "crates": "#c98500", "npm": "#d55181", "docker": "#008300", "nuget": "#9085e9"}
 
 
 def test_legend_shows_each_registrys_total_and_30_days():
@@ -111,10 +123,11 @@ def test_unknown_30_day_shows_n_a_in_the_legend():
 def test_bar_segments_are_proportional_and_use_theme_colours():
     svg = render_card(STATS, date(2026, 10, 11), "dark")
     rects = re.findall(r'<rect x="([\d.]+)" y="\d+" width="([\d.]+)" height="8" fill="(#[0-9a-f]{6})"/>', svg)
-    assert [fill for _, _, fill in rects] == [COLORS["dark"][s.key] for s in STATS]
+    largest_first = sorted(STATS, key=lambda s: -s.total)
+    assert [fill for _, _, fill in rects] == [COLORS["dark"][s.key] for s in largest_first]
     widths = [float(w) for _, w, _ in rects]
     assert sum(widths) == pytest.approx(800 - 2 * 24 - 4 * 2, abs=0.05)  # full width less padding and 4 gaps
-    assert widths[0] / widths[1] == pytest.approx(812 / 150, rel=0.01)
+    assert widths[0] / widths[1] == pytest.approx(812 / 201, rel=0.01)  # PyPI, then npm
 
 
 def test_zero_total_registry_gets_no_bar_segment_but_stays_in_the_legend():
