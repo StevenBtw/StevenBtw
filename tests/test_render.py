@@ -52,13 +52,29 @@ def texts(svg):
 @pytest.mark.parametrize("theme", ["light", "dark"])
 def test_card_is_valid_svg_with_headline_numbers(theme):
     svg = render_card(STATS, date(2026, 10, 11), theme)
-    root = ET.fromstring(svg)
-    assert root.get("width") == "495"
     shown = texts(svg)
-    assert "Package downloads" in shown
     assert "1.2M" in shown  # 1,200,000 all time
     assert "+46K" in shown  # 31K + 6K + 9K known; Docker and NuGet unknown
     assert "updated 11 Oct" in shown
+
+
+def test_card_is_drawn_at_the_readme_column_width():
+    # GitHub's profile README column is 800px on desktop; the README scales the image to 100% of it.
+    root = ET.fromstring(render_card(STATS, date(2026, 10, 11), "light"))
+    assert root.get("width") == "800"
+    assert root.get("viewBox").startswith("0 0 800 ")
+
+
+def test_card_leaves_the_title_to_the_readme_heading():
+    assert "Package downloads" not in texts(render_card(STATS, date(2026, 10, 11), "light"))
+
+
+@pytest.mark.parametrize(("theme", "surface"), [("light", "#f6f8fa"), ("dark", "#151b23")])
+def test_card_uses_the_readme_code_block_surface_without_a_border(theme, surface):
+    background = ET.fromstring(render_card(STATS, date(2026, 10, 11), theme)).find(f"{SVG}rect")
+    assert background.get("fill") == surface
+    assert background.get("stroke") is None
+    assert background.get("rx") == "6"
 
 
 def test_card_has_no_scripts_external_resources_or_em_dashes():
@@ -69,14 +85,22 @@ def test_card_has_no_scripts_external_resources_or_em_dashes():
     assert "\u2014" not in svg
 
 
-def test_legend_keeps_the_given_order_column_by_column():
+def test_legend_is_one_row_in_the_given_order():
     svg = render_card(STATS, date(2026, 10, 11), "light")
-    labels = [t for t in texts(svg) if t in {"PyPI", "crates.io", "Docker", "NuGet", "npm"}]
-    assert labels == ["PyPI", "crates.io", "Docker", "NuGet", "npm"]
+    order = ["PyPI", "crates.io", "Docker", "NuGet", "npm"]
     root = ET.fromstring(svg)
-    positions = {t.text: (float(t.get("x")), float(t.get("y"))) for t in root.iter(f"{SVG}text") if t.text in labels}
-    assert positions["PyPI"][0] == positions["Docker"][0] < positions["NuGet"][0]  # 3 rows left, 2 right
-    assert positions["PyPI"][1] == positions["NuGet"][1]
+    labels = [t for t in root.iter(f"{SVG}text") if t.text in order]
+    assert [t.text for t in labels] == order
+    assert len({t.get("y") for t in labels}) == 1
+    xs = [float(t.get("x")) for t in labels]
+    steps = {round(b - a, 2) for a, b in zip(xs, xs[1:])}
+    assert len(steps) == 1 and steps.pop() > 0  # evenly spaced, left to right
+
+
+def test_legend_shows_each_registrys_total_and_30_days():
+    shown = texts(render_card(STATS, date(2026, 10, 11), "light"))
+    for value in ("812K", "+31K", "150K", "+6K", "201K", "+9K"):
+        assert value in shown
 
 
 def test_unknown_30_day_shows_n_a_in_the_legend():
@@ -86,10 +110,10 @@ def test_unknown_30_day_shows_n_a_in_the_legend():
 
 def test_bar_segments_are_proportional_and_use_theme_colours():
     svg = render_card(STATS, date(2026, 10, 11), "dark")
-    rects = re.findall(r'<rect x="([\d.]+)" y="118" width="([\d.]+)" height="8" fill="(#[0-9a-f]{6})"/>', svg)
+    rects = re.findall(r'<rect x="([\d.]+)" y="\d+" width="([\d.]+)" height="8" fill="(#[0-9a-f]{6})"/>', svg)
     assert [fill for _, _, fill in rects] == [COLORS["dark"][s.key] for s in STATS]
     widths = [float(w) for _, w, _ in rects]
-    assert sum(widths) == pytest.approx(445 - 2 * 4, abs=0.05)
+    assert sum(widths) == pytest.approx(800 - 2 * 24 - 4 * 2, abs=0.05)  # full width less padding and 4 gaps
     assert widths[0] / widths[1] == pytest.approx(812 / 150, rel=0.01)
 
 
