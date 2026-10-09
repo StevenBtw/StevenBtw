@@ -15,11 +15,22 @@ from datetime import date, timedelta
 USER_AGENT = "StevenBtw-profile-downloads (+https://github.com/StevenBtw/StevenBtw)"
 
 # Fetch order. The card sorts registries by downloads; this order only breaks ties.
-ORDER =("pypi", "crates", "docker", "nuget", "npm")
-LABELS = {"pypi": "PyPI", "crates": "crates.io", "docker": "Docker", "nuget": "NuGet", "npm": "npm"}
+ORDER = ("pypi", "crates", "docker", "nuget", "npm", "github", "pubdev")
+LABELS = {
+    "pypi": "PyPI",
+    "crates": "crates.io",
+    "docker": "Docker",
+    "nuget": "NuGet",
+    "npm": "npm",
+    "github": "GitHub",
+    "pubdev": "pub.dev",
+}
 
 # Registries that only publish an all-time total; their 30-day number comes from history snapshots.
-SNAPSHOT_30D = frozenset({"docker", "nuget"})
+SNAPSHOT_30D = frozenset({"docker", "nuget", "github"})
+
+# Release assets that are not installs: checksum lists and signatures.
+NOT_DOWNLOADS = (".txt", ".sha256", ".sha512", ".sig", ".asc", ".minisig")
 
 NPM_DATA_START = date(2015, 1, 10)  # npm download statistics begin on this day
 NPM_WINDOW = timedelta(days=365)  # npm accepts ranges of up to 18 months per request
@@ -33,7 +44,7 @@ class FetchError(Exception):
 
 @dataclass(frozen=True)
 class Counts:
-    total: int
+    total: int | None  # None when the registry has no all-time number (pub.dev)
     last30: int | None  # None when the registry has no 30-day number
 
 
@@ -126,10 +137,35 @@ def fetch_docker(name: str, today: date, get: GetJson = get_json) -> Counts:
     return Counts(int(data["pull_count"]), None)
 
 
+def fetch_github(name: str, today: date, get: GetJson = get_json) -> Counts:
+    """Downloads of a repository's release archives. Uses GITHUB_TOKEN when set, for the higher rate limit."""
+    token = os.environ.get("GITHUB_TOKEN")
+    headers = {"Accept": "application/vnd.github+json"} | ({"Authorization": f"Bearer {token}"} if token else {})
+    total, page = 0, 1
+    while True:
+        releases = get(f"https://api.github.com/repos/{name}/releases?per_page=100&page={page}", headers)
+        for release in releases:
+            for asset in release["assets"]:
+                asset_name = asset["name"].lower()
+                if "checksum" not in asset_name and not asset_name.endswith(NOT_DOWNLOADS):
+                    total += int(asset["download_count"])
+        if len(releases) < 100:
+            return Counts(total, None)
+        page += 1
+
+
+def fetch_pubdev(name: str, today: date, get: GetJson = get_json) -> Counts:
+    """pub.dev only publishes the last 30 days, so the all-time number stays unknown."""
+    data = get(f"https://pub.dev/api/packages/{name}/score")
+    return Counts(None, int(data["downloadCount30Days"]))
+
+
 FETCHERS: dict[str, Callable[[str, date], Counts]] = {
     "pypi": fetch_pypi,
     "crates": fetch_crates,
     "docker": fetch_docker,
     "nuget": fetch_nuget,
     "npm": fetch_npm,
+    "github": fetch_github,
+    "pubdev": fetch_pubdev,
 }

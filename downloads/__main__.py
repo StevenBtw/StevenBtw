@@ -14,7 +14,7 @@ from pathlib import Path
 
 from downloads.history import History, last30_from_snapshots, latest, load, prune, record, save, snapshots
 from downloads.registries import FETCHERS, LABELS, ORDER, SNAPSHOT_30D, Counts
-from downloads.render import RegistryStat, render_card
+from downloads.render import VARIANTS, RegistryStat, render_card
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -44,34 +44,43 @@ def collect(
     fetchers: dict[str, Fetcher] = FETCHERS,
     sleep: Callable[[float], None] = time.sleep,
 ) -> tuple[list[RegistryStat], int]:
-    """Fetch every package, record fresh snapshots, and return per-registry stats and the number of successes."""
+    """Fetch every package, record fresh snapshots, and return per-registry stats and the number of successes.
+
+    Registries without packages are left out. A number stays None (shown as n/a) when no package has one.
+    """
     stats, successes = [], 0
     for registry in ORDER:
-        total, last30_parts = 0, []
-        for i, name in enumerate(packages[registry]):
+        names = packages.get(registry, [])
+        if not names:
+            continue
+        totals, last30s = [], []
+        for i, name in enumerate(names):
             if i and registry in PACING:
                 sleep(PACING[registry])
             try:
                 counts = fetchers[registry](name, today)
             except Exception as error:  # any surprise from one package must not sink the whole run
                 previous = latest(history, registry, name)
-                fallback = f"using snapshot from {previous['date']}" if previous else "counting 0"
+                fallback = f"using snapshot from {previous['date']}" if previous else "no data yet"
                 warn(f"{LABELS[registry]} {name}: {error!r}; {fallback}")
                 if previous:
-                    total += previous["total"]
-                    if previous["last30"] is not None:
-                        last30_parts.append(previous["last30"])
+                    totals.append(previous["total"])
+                    last30s.append(previous["last30"])
                 continue
             successes += 1
             last30 = counts.last30
             if registry in SNAPSHOT_30D:
                 last30 = last30_from_snapshots(snapshots(history, registry, name), today, counts.total)
             record(history, registry, name, today, counts.total, last30)
-            total += counts.total
-            if last30 is not None:
-                last30_parts.append(last30)
-        stats.append(RegistryStat(registry, LABELS[registry], total, sum(last30_parts) if last30_parts else None))
+            totals.append(counts.total)
+            last30s.append(last30)
+        stats.append(RegistryStat(registry, LABELS[registry], _known_sum(totals), _known_sum(last30s)))
     return stats, successes
+
+
+def _known_sum(values: list[int | None]) -> int | None:
+    known = [v for v in values if v is not None]
+    return sum(known) if known else None
 
 
 def main(
@@ -92,11 +101,14 @@ def main(
     save(history_path, history)
     assets = root / "assets"
     assets.mkdir(exist_ok=True)
-    for theme in ("light", "dark"):
-        (assets / f"downloads-{theme}.svg").write_text(render_card(stats, today, theme), encoding="utf-8")
+    for suffix, (shown, columns, width) in VARIANTS.items():
+        for theme in ("light", "dark"):
+            card = render_card(stats, today, theme, shown, columns, width)
+            (assets / f"downloads{suffix}-{theme}.svg").write_text(card, encoding="utf-8")
     for s in stats:
+        total = "n/a" if s.total is None else f"{s.total:,}"
         recent = "n/a" if s.last30 is None else f"{s.last30:,}"
-        print(f"{s.label:<10} {s.total:>12,} all time   {recent:>10} last 30 days")
+        print(f"{s.label:<10} {total:>12} all time   {recent:>10} last 30 days")
     return 0
 
 

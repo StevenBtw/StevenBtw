@@ -14,6 +14,8 @@ crates = ["gwp"]
 nuget = ["Grafeo"]
 docker = ["grafeo/grafeo-server"]
 npm = ["gwp-js"]
+github = ["GrafeoDB/grafeo"]
+pubdev = ["grafeo"]
 """
 
 
@@ -25,6 +27,8 @@ def fetchers(**overrides):
         "docker": lambda name, today: Counts(300, None),
         "nuget": lambda name, today: Counts(200, None),
         "npm": lambda name, today: Counts(100, 10),
+        "github": lambda name, today: Counts(80, None),
+        "pubdev": lambda name, today: Counts(None, 40),
     }
     return base | overrides
 
@@ -36,7 +40,9 @@ def failing(name, today):
 def test_load_packages_fills_missing_registries(tmp_path):
     path = tmp_path / "packages.toml"
     path.write_text('crates = ["gwp"]\n', encoding="utf-8")
-    assert load_packages(path) == {"pypi": [], "crates": ["gwp"], "docker": [], "nuget": [], "npm": []}
+    assert load_packages(path) == {
+        "pypi": [], "crates": ["gwp"], "docker": [], "nuget": [], "npm": [], "github": [], "pubdev": []
+    }
 
 
 def test_load_packages_rejects_unknown_registries(tmp_path):
@@ -46,17 +52,28 @@ def test_load_packages_rejects_unknown_registries(tmp_path):
         load_packages(path)
 
 
-def test_collect_sums_packages_per_registry_in_fixed_order(tmp_path):
+def test_collect_sums_packages_per_registry_and_skips_registries_without_packages():
     packages = {"pypi": ["a", "b"], "crates": ["c"], "docker": [], "nuget": [], "npm": ["d"]}
     stats, successes = collect(packages, {}, TODAY, fetchers(), sleep=lambda s: None)
-    assert [(s.key, s.total, s.last30) for s in stats] == [
-        ("pypi", 2000, 200),
-        ("crates", 500, 50),
-        ("docker", 0, None),
-        ("nuget", 0, None),
-        ("npm", 100, 10),
-    ]
+    assert [(s.key, s.total, s.last30) for s in stats] == [("pypi", 2000, 200), ("crates", 500, 50), ("npm", 100, 10)]
     assert successes == 4
+
+
+def test_a_registry_without_all_time_numbers_stays_unknown():
+    stats, _ = collect({"pubdev": ["grafeo"]}, {}, TODAY, fetchers(), sleep=lambda s: None)
+    assert [(s.key, s.label, s.total, s.last30) for s in stats] == [("pubdev", "pub.dev", None, 40)]
+
+
+def test_failed_package_with_unknown_total_falls_back_to_unknown(capsys):
+    history = {"pubdev": {"grafeo": [{"date": "2026-11-08", "total": None, "last30": 30}]}}
+    stats, _ = collect({"pubdev": ["grafeo"]}, history, TODAY, fetchers(pubdev=failing), sleep=lambda s: None)
+    assert [(s.total, s.last30) for s in stats] == [(None, 30)]
+
+
+def test_github_releases_get_30_days_from_history():
+    history = {"github": {"GrafeoDB/grafeo": [{"date": "2026-10-16", "total": 20, "last30": None}]}}
+    stats, _ = collect({"github": ["GrafeoDB/grafeo"]}, history, TODAY, fetchers(), sleep=lambda s: None)
+    assert [(s.key, s.total, s.last30) for s in stats] == [("github", 80, 60)]
 
 
 def test_collect_paces_pypi_requests():
@@ -107,7 +124,7 @@ def test_unexpected_json_shape_is_a_failed_fetch_not_a_crash():
     packages = {"pypi": [], "crates": [], "docker": ["grafeo/grafeo-server"], "nuget": [], "npm": []}
     stats, successes = collect(packages, {}, TODAY, fetchers(docker=renamed_field), sleep=lambda s: None)
     assert successes == 0
-    assert next(s for s in stats if s.key == "docker").total == 0
+    assert next(s for s in stats if s.key == "docker").total is None  # nothing known yet: shown as n/a
 
 
 def test_reshaped_response_through_a_real_fetcher_falls_back_to_the_last_snapshot(monkeypatch, capsys):
@@ -127,15 +144,18 @@ def test_reshaped_response_through_a_real_fetcher_falls_back_to_the_last_snapsho
     assert "::warning::PyPI solvor" in capsys.readouterr().out
 
 
-def test_main_writes_history_and_both_cards(tmp_path, capsys):
+def test_main_writes_history_and_the_wide_and_compact_cards(tmp_path, capsys):
     (tmp_path / "packages.toml").write_text(PACKAGES, encoding="utf-8")
     assert main(tmp_path, TODAY, fetchers(), sleep=lambda s: None) == 0
     history = json.loads((tmp_path / "data" / "history.json").read_text(encoding="utf-8"))
     assert history["docker"]["grafeo/grafeo-server"] == [{"date": "2026-11-15", "total": 300, "last30": None}]
-    for theme in ("light", "dark"):
-        svg = (tmp_path / "assets" / f"downloads-{theme}.svg").read_text(encoding="utf-8")
-        assert svg.startswith("<svg")
-    assert "PyPI" in capsys.readouterr().out
+    assert history["pubdev"]["grafeo"] == [{"date": "2026-11-15", "total": None, "last30": 40}]
+    for variant in ("", "-md", "-sm", "-xs"):
+        for theme in ("light", "dark"):
+            svg = (tmp_path / "assets" / f"downloads{variant}-{theme}.svg").read_text(encoding="utf-8")
+            assert svg.startswith("<svg")
+    out = capsys.readouterr().out
+    assert "PyPI" in out and "pub.dev" in out
 
 
 def test_main_writes_nothing_when_every_fetch_fails(tmp_path, capsys):

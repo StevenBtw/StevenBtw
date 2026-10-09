@@ -27,3 +27,5 @@ npm = [
   "@grafeo-db/cli",
   "gwp-js",
 ]
+github = ["GrafeoDB/grafeo"]  # release archives of the grafeo CLI; checksum files are not counted
+pubdev = ["grafeo"]  # pub.dev only reports the last 30 days

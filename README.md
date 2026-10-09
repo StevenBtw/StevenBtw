@@ -47,7 +47,15 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 ## Package Downloads
 
+<!-- Card variants by README column width: xs under 460px, sm to 600px, md to 760px, full card above.
+     GitHub's column narrows again at 768px and 1012px wide screens (sidebar), hence two ranges for xs. -->
 <picture>
+  <source media="(max-width: 556px) and (prefers-color-scheme: dark), (min-width: 768px) and (max-width: 844px) and (prefers-color-scheme: dark)" srcset="assets/downloads-xs-dark.svg">
+  <source media="(max-width: 556px), (min-width: 768px) and (max-width: 844px)" srcset="assets/downloads-xs-light.svg">
+  <source media="(max-width: 1048px) and (prefers-color-scheme: dark)" srcset="assets/downloads-sm-dark.svg">
+  <source media="(max-width: 1048px)" srcset="assets/downloads-sm-light.svg">
+  <source media="(max-width: 1208px) and (prefers-color-scheme: dark)" srcset="assets/downloads-md-dark.svg">
+  <source media="(max-width: 1208px)" srcset="assets/downloads-md-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="assets/downloads-dark.svg">
-  <img alt="Package downloads across PyPI, crates.io, npm, NuGet and Docker Hub" src="assets/downloads-light.svg" width="100%">
+  <img alt="Package downloads across PyPI, crates.io, npm, Docker Hub, NuGet, GitHub Releases and pub.dev" src="assets/downloads-light.svg" width="100%">
 </picture>

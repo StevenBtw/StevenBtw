@@ -12,7 +12,9 @@ from downloads.registries import (
     FetchError,
     fetch_crates,
     fetch_docker,
+    fetch_github,
     fetch_npm,
+    fetch_pubdev,
     fetch_nuget,
     fetch_pypi,
     get_json,
@@ -148,6 +150,43 @@ def test_docker_reads_pull_count():
         }
     )
     assert fetch_docker("grafeo/grafeo-server", TODAY, get) == Counts(8038, None)
+
+
+RELEASES = "https://api.github.com/repos/GrafeoDB/grafeo/releases?per_page=100&page={}"
+
+
+def release(*assets):
+    return {"tag_name": "v0.5.44", "assets": [{"name": n, "download_count": c} for n, c in assets]}
+
+
+def test_github_counts_release_archives_not_checksums(monkeypatch):
+    monkeypatch.delenv("GITHUB_TOKEN", raising=False)
+    get = fake_get(
+        {
+            RELEASES.format(1): [
+                release(("grafeo-v0.5.44-x86_64-unknown-linux-gnu.tar.gz", 40), ("checksums.txt", 30)),
+                release(("grafeo-v0.5.43-x86_64-pc-windows-msvc.zip", 2), ("grafeo.tar.gz.sha256", 9), ("grafeo.sig", 4)),
+            ]
+        }
+    )
+    assert fetch_github("GrafeoDB/grafeo", TODAY, get) == Counts(42, None)
+    assert "Authorization" not in get.calls[0][1]
+
+
+def test_github_follows_release_pages_and_sends_the_token(monkeypatch):
+    monkeypatch.setenv("GITHUB_TOKEN", "ghs_test")
+    full_page = [release(("grafeo.tar.gz", 1))] * 100
+    get = fake_get({RELEASES.format(1): full_page, RELEASES.format(2): [release(("grafeo.zip", 5))]})
+    assert fetch_github("GrafeoDB/grafeo", TODAY, get) == Counts(105, None)
+    assert [url for url, _ in get.calls] == [RELEASES.format(1), RELEASES.format(2)]
+    assert get.calls[0][1]["Authorization"] == "Bearer ghs_test"
+
+
+def test_pubdev_has_only_a_30_day_number():
+    get = fake_get(
+        {"https://pub.dev/api/packages/grafeo/score": {"grantedPoints": 160, "likeCount": 1, "downloadCount30Days": 408}}
+    )
+    assert fetch_pubdev("grafeo", TODAY, get) == Counts(None, 408)
 
 
 def http_error(code, headers=None):

@@ -29,6 +29,7 @@ jobs:
         run: uv run python -m downloads
         env:
           PEPY_API_KEY: ${{ secrets.PEPY_API_KEY }}
+          GITHUB_TOKEN: ${{ github.token }} # release download counts; avoids the shared-runner rate limit
 
       - name: Commit updated cards
         uses: stefanzweifel/git-auto-commit-action@v7
