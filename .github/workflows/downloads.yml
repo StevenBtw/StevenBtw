@@ -1,0 +1,36 @@
+name: Download stats
+
+on:
+  schedule:
+    - cron: "0 6 * * 0" # Sundays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: download-stats
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: astral-sh/setup-uv@v10
+
+      - name: Run tests
+        run: uv run pytest -q
+
+      - name: Fetch downloads and render cards
+        run: uv run python -m downloads
+        env:
+          PEPY_API_KEY: ${{ secrets.PEPY_API_KEY }}
+
+      - name: Commit updated cards
+        uses: stefanzweifel/git-auto-commit-action@v7
+        with:
+          commit_message: "Update download stats"
+          file_pattern: "assets/*.svg data/history.json"

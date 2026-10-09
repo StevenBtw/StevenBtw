@@ -11,6 +11,11 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 🔚 But enough **About Me**.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/downloads-dark.svg">
+  <img alt="Package downloads across PyPI, crates.io, npm, NuGet and Docker Hub" src="assets/downloads-light.svg">
+</picture>
+
 ## My Projects
 
 <pre>
