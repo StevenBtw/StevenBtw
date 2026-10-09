@@ -1,0 +1,173 @@
+{
+  "crates": {
+    "boltr": [
+      {
+        "date": "2026-10-09",
+        "last30": 3715,
+        "total": 8583
+      }
+    ],
+    "grafeo": [
+      {
+        "date": "2026-10-09",
+        "last30": 4070,
+        "total": 24074
+      }
+    ],
+    "grafeo-cli": [
+      {
+        "date": "2026-10-09",
+        "last30": 66,
+        "total": 926
+      }
+    ],
+    "gwp": [
+      {
+        "date": "2026-10-09",
+        "last30": 253,
+        "total": 1581
+      }
+    ]
+  },
+  "docker": {
+    "grafeo/grafeo-server": [
+      {
+        "date": "2026-10-09",
+        "last30": null,
+        "total": 8038
+      }
+    ]
+  },
+  "npm": {
+    "@grafeo-db/cli": [
+      {
+        "date": "2026-10-09",
+        "last30": 415,
+        "total": 6834
+      }
+    ],
+    "@grafeo-db/js": [
+      {
+        "date": "2026-10-09",
+        "last30": 1140,
+        "total": 14736
+      }
+    ],
+    "@grafeo-db/wasm": [
+      {
+        "date": "2026-10-09",
+        "last30": 994,
+        "total": 10632
+      }
+    ],
+    "@grafeo-db/wasm-lite": [
+      {
+        "date": "2026-10-09",
+        "last30": 645,
+        "total": 7550
+      }
+    ],
+    "@grafeo-db/web": [
+      {
+        "date": "2026-10-09",
+        "last30": 812,
+        "total": 8009
+      }
+    ],
+    "gwp-js": [
+      {
+        "date": "2026-10-09",
+        "last30": 16,
+        "total": 941
+      }
+    ]
+  },
+  "nuget": {
+    "Grafeo": [
+      {
+        "date": "2026-10-09",
+        "last30": null,
+        "total": 2776
+      }
+    ]
+  },
+  "pypi": {
+    "anywidget-archimate": [
+      {
+        "date": "2026-10-09",
+        "last30": 282,
+        "total": 5333
+      }
+    ],
+    "anywidget-graph": [
+      {
+        "date": "2026-10-09",
+        "last30": 787,
+        "total": 12900
+      }
+    ],
+    "anywidget-vector": [
+      {
+        "date": "2026-10-09",
+        "last30": 517,
+        "total": 12950
+      }
+    ],
+    "grafeo": [
+      {
+        "date": "2026-10-09",
+        "last30": 25427,
+        "total": 402660
+      }
+    ],
+    "grafeo-cuda": [
+      {
+        "date": "2026-10-09",
+        "last30": 56,
+        "total": 852
+      }
+    ],
+    "grafeo-langchain": [
+      {
+        "date": "2026-10-09",
+        "last30": 269,
+        "total": 3121
+      }
+    ],
+    "grafeo-llamaindex": [
+      {
+        "date": "2026-10-09",
+        "last30": 266,
+        "total": 4451
+      }
+    ],
+    "grafeo-mcp": [
+      {
+        "date": "2026-10-09",
+        "last30": 355,
+        "total": 4287
+      }
+    ],
+    "grafeo-memory": [
+      {
+        "date": "2026-10-09",
+        "last30": 274,
+        "total": 6435
+      }
+    ],
+    "gwp-py": [
+      {
+        "date": "2026-10-09",
+        "last30": 196,
+        "total": 5654
+      }
+    ],
+    "solvor": [
+      {
+        "date": "2026-10-09",
+        "last30": 18613,
+        "total": 190589
+      }
+    ]
+  }
+}
