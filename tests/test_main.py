@@ -4,7 +4,7 @@ from datetime import date
 import pytest
 
 from downloads.__main__ import collect, load_packages, main
-from downloads.registries import Counts, FetchError
+from downloads.registries import Counts, FetchError, fetch_pypi
 
 TODAY = date(2026, 11, 15)
 
@@ -108,6 +108,23 @@ def test_unexpected_json_shape_is_a_failed_fetch_not_a_crash():
     stats, successes = collect(packages, {}, TODAY, fetchers(docker=renamed_field), sleep=lambda s: None)
     assert successes == 0
     assert next(s for s in stats if s.key == "docker").total == 0
+
+
+def test_reshaped_response_through_a_real_fetcher_falls_back_to_the_last_snapshot(monkeypatch, capsys):
+    monkeypatch.setenv("PEPY_API_KEY", "test-key")
+    reshaped = {"total_downloads": 999, "downloads": [["2026-11-14", 5]]}  # a list where pepy documents a dict
+
+    def pypi(name, today):
+        return fetch_pypi(name, today, get=lambda url, headers=None: reshaped)
+
+    history = {"pypi": {"solvor": [{"date": "2026-11-08", "total": 700, "last30": 70}]}}
+    packages = {"pypi": ["solvor"], "crates": [], "docker": [], "nuget": [], "npm": []}
+    stats, successes = collect(packages, history, TODAY, fetchers(pypi=pypi), sleep=lambda s: None)
+    pypi_stat = next(s for s in stats if s.key == "pypi")
+    assert (pypi_stat.total, pypi_stat.last30) == (700, 70)
+    assert successes == 0
+    assert history["pypi"]["solvor"] == [{"date": "2026-11-08", "total": 700, "last30": 70}]
+    assert "::warning::PyPI solvor" in capsys.readouterr().out
 
 
 def test_main_writes_history_and_both_cards(tmp_path, capsys):

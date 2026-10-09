@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import http.client
 import json
 import os
 import time
@@ -54,7 +55,9 @@ def get_json(
         try:
             with opener(request, timeout=30) as response:
                 return json.load(response)
-        except (urllib.error.URLError, TimeoutError, ValueError) as caught:
+        # urllib wraps only send errors in URLError; a dropped or truncated response arrives as a raw
+        # OSError or HTTPException. URLError and TimeoutError are OSErrors too.
+        except (OSError, http.client.HTTPException, ValueError) as caught:
             error = caught
     raise FetchError(f"{url}: {error}") from error
 

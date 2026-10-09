@@ -13,7 +13,7 @@ from datetime import UTC, date, datetime
 from pathlib import Path
 
 from downloads.history import History, last30_from_snapshots, latest, load, prune, record, save, snapshots
-from downloads.registries import FETCHERS, LABELS, ORDER, SNAPSHOT_30D, Counts, FetchError
+from downloads.registries import FETCHERS, LABELS, ORDER, SNAPSHOT_30D, Counts
 from downloads.render import RegistryStat, render_card
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -53,7 +53,7 @@ def collect(
                 sleep(PACING[registry])
             try:
                 counts = fetchers[registry](name, today)
-            except (FetchError, KeyError, TypeError, ValueError) as error:
+            except Exception as error:  # any surprise from one package must not sink the whole run
                 previous = latest(history, registry, name)
                 fallback = f"using snapshot from {previous['date']}" if previous else "counting 0"
                 warn(f"{LABELS[registry]} {name}: {error!r}; {fallback}")

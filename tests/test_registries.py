@@ -1,5 +1,6 @@
 """Registry parsing against trimmed live responses (fetched 2026-10-09), and the HTTP retry rules."""
 
+import http.client
 import io
 import urllib.error
 from datetime import date
@@ -189,6 +190,20 @@ def test_get_json_caps_a_429_wait_at_60_seconds():
     opener = scripted_opener(http_error(429, {"Retry-After": "600"}), b"{}")
     get_json("https://example.test", opener=opener, sleep=pauses.append)
     assert pauses == [60.0]
+
+
+def test_get_json_retries_a_dropped_connection():
+    # urllib only wraps errors from sending the request; a dropped response arrives unwrapped.
+    pauses = []
+    opener = scripted_opener(http.client.RemoteDisconnected("Remote end closed connection"), b'{"ok": true}')
+    assert get_json("https://example.test", opener=opener, sleep=pauses.append) == {"ok": True}
+    assert pauses == [5.0]
+
+
+def test_get_json_turns_a_truncated_body_into_a_fetch_error():
+    opener = scripted_opener(http.client.IncompleteRead(b"{"), http.client.IncompleteRead(b"{"))
+    with pytest.raises(FetchError):
+        get_json("https://example.test", opener=opener, sleep=lambda s: None)
 
 
 def test_get_json_gives_up_after_the_retry():
