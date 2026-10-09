@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="172" viewBox="0 0 800 172" role="img" aria-labelledby="title">
-<title id="title">Package downloads: 775,342 all time, 63,730 in the last 30 days. PyPI 649,232 all time, 47,042 in the last 30 days; crates.io 66,594 all time, 12,666 in the last 30 days; npm 48,702 all time, 4,022 in the last 30 days; Docker 8,038 all time, unknown in the last 30 days; NuGet 2,776 all time, unknown in the last 30 days.</title>
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="184" viewBox="0 0 800 184" role="img" aria-labelledby="title">
+<title id="title">Package downloads: 776,093 all time, 64,138 in the last 30 days. PyPI 649,232 all time, 47,042 in the last 30 days; crates.io 66,594 all time, 12,666 in the last 30 days; npm 48,702 all time, 4,022 in the last 30 days; Docker 8,038 all time, unknown in the last 30 days; NuGet 2,776 all time, unknown in the last 30 days; GitHub 751 all time, unknown in the last 30 days; pub.dev unknown all time, 408 in the last 30 days.</title>
 <style>
 text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif; fill: #1f2328; }
 .big { font-size: 32px; font-weight: 700; }
@@ -9,12 +9,12 @@ text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 
 .caption, .delta, .foot { font-size: 12px; }
 .caption, .delta, .foot { fill: #59636e; }
 </style>
-<rect width="800" height="172" rx="6" fill="#f6f8fa"/>
-<text x="24" y="48" class="big">775K</text>
+<rect width="800" height="184" rx="6" fill="#f6f8fa"/>
+<text x="24" y="48" class="big">776K</text>
 <text x="24" y="68" class="caption">all time</text>
-<text x="174.40" y="48" class="mid">+63.7K</text>
-<text x="174.40" y="68" class="caption">last 30 days</text>
+<text x="131.43" y="48" class="mid">+64.1K</text>
+<text x="131.43" y="68" class="caption">last 30 days</text>
 <text x="776" y="30" class="foot" text-anchor="end">updated 9 Oct</text>
-<clipPath id="bar"><rect x="24" y="90" width="752" height="8" rx="4"/></clipPath><g clip-path="url(#bar)"><rect x="24.00" y="90" width="622.99" height="8" fill="#2a78d6"/><rect x="648.99" y="90" width="63.90" height="8" fill="#eda100"/><rect x="714.89" y="90" width="46.73" height="8" fill="#e87ba4"/><rect x="763.62" y="90" width="7.71" height="8" fill="#008300"/><rect x="773.34" y="90" width="2.66" height="8" fill="#4a3aa7"/></g>
-<circle cx="29.00" cy="122" r="5" fill="#2a78d6"/><text x="40.00" y="126" class="label">PyPI</text><text x="40.00" y="148" class="value">649K</text><text x="96.00" y="148" class="delta">+47K</text><circle cx="179.40" cy="122" r="5" fill="#eda100"/><text x="190.40" y="126" class="label">crates.io</text><text x="190.40" y="148" class="value">66.6K</text><text x="246.40" y="148" class="delta">+12.7K</text><circle cx="329.80" cy="122" r="5" fill="#e87ba4"/><text x="340.80" y="126" class="label">npm</text><text x="340.80" y="148" class="value">48.7K</text><text x="396.80" y="148" class="delta">+4.02K</text><circle cx="480.20" cy="122" r="5" fill="#008300"/><text x="491.20" y="126" class="label">Docker</text><text x="491.20" y="148" class="value">8.04K</text><text x="547.20" y="148" class="delta">n/a</text><circle cx="630.60" cy="122" r="5" fill="#4a3aa7"/><text x="641.60" y="126" class="label">NuGet</text><text x="641.60" y="148" class="value">2.78K</text><text x="697.60" y="148" class="delta">n/a</text>
+<clipPath id="bar"><rect x="24" y="90" width="752" height="8" rx="4"/></clipPath><g clip-path="url(#bar)"><rect x="24.00" y="90" width="620.71" height="8" fill="#2a78d6"/><rect x="646.71" y="90" width="63.67" height="8" fill="#eda100"/><rect x="712.38" y="90" width="46.56" height="8" fill="#e87ba4"/><rect x="760.94" y="90" width="7.68" height="8" fill="#008300"/><rect x="770.63" y="90" width="2.65" height="8" fill="#4a3aa7"/><rect x="775.28" y="90" width="0.72" height="8" fill="#e34948"/></g>
+<circle cx="29.00" cy="122" r="5" fill="#2a78d6"/><text x="40.00" y="126" class="label">PyPI</text><text x="40.00" y="146" class="value">649K</text><text x="40.00" y="164" class="delta">+47K</text><circle cx="136.43" cy="122" r="5" fill="#eda100"/><text x="147.43" y="126" class="label">crates.io</text><text x="147.43" y="146" class="value">66.6K</text><text x="147.43" y="164" class="delta">+12.7K</text><circle cx="243.86" cy="122" r="5" fill="#e87ba4"/><text x="254.86" y="126" class="label">npm</text><text x="254.86" y="146" class="value">48.7K</text><text x="254.86" y="164" class="delta">+4.02K</text><circle cx="351.29" cy="122" r="5" fill="#008300"/><text x="362.29" y="126" class="label">Docker</text><text x="362.29" y="146" class="value">8.04K</text><text x="362.29" y="164" class="delta">n/a</text><circle cx="458.71" cy="122" r="5" fill="#4a3aa7"/><text x="469.71" y="126" class="label">NuGet</text><text x="469.71" y="146" class="value">2.78K</text><text x="469.71" y="164" class="delta">n/a</text><circle cx="566.14" cy="122" r="5" fill="#e34948"/><text x="577.14" y="126" class="label">GitHub</text><text x="577.14" y="146" class="value">751</text><text x="577.14" y="164" class="delta">n/a</text><circle cx="673.57" cy="122" r="5" fill="#1baf7a"/><text x="684.57" y="126" class="label">pub.dev</text><text x="684.57" y="146" class="value">n/a</text><text x="684.57" y="164" class="delta">+408</text>
 </svg>

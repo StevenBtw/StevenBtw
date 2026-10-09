@@ -45,6 +45,15 @@
       }
     ]
   },
+  "github": {
+    "GrafeoDB/grafeo": [
+      {
+        "date": "2026-10-09",
+        "last30": null,
+        "total": 751
+      }
+    ]
+  },
   "npm": {
     "@grafeo-db/cli": [
       {
@@ -95,6 +104,15 @@
         "date": "2026-10-09",
         "last30": null,
         "total": 2776
+      }
+    ]
+  },
+  "pubdev": {
+    "grafeo": [
+      {
+        "date": "2026-10-09",
+        "last30": 408,
+        "total": null
       }
     ]
   },
