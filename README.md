@@ -28,8 +28,8 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ┃      
 ┣━━ 🎡 <b>Grafeo Ecosystem</b>
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo">grafeo</a>              - Embeddable graph database
+┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-web">grafeo-web</a>          - Browser-based via WASM 
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-server">grafeo-server</a>       - HTTP server & web UI
-┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-web">grafeo-web</a>          - Browser-based via WASM
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-memory">grafeo-memory</a>       - AI memory layer for agents
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-mcp">grafeo-mcp</a>          - MCP server for AI agents
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-langchain">grafeo-langchain</a>    - LangChain integration
