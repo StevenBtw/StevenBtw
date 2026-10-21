@@ -40,7 +40,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ┗━━ 🗄️ <b>Archived</b>
     ┣━━ <a href="https://github.com/StevenBtw/AoC_2025">AoC_2025</a>            - Advent of Code, one tool per day
     ┣━━ <a href="https://github.com/StevenBtw/aoc_helper">aoc_helper</a>          - AoC helper scripts
-    ┃   <a href="https://github.com/StevenBtw/agent-framework-cookiecutter">agent-framework</a>     - Microsoft Agent Framework template
+    ┣━━ <a href="https://github.com/StevenBtw/agent-framework-cookiecutter">agent-framework</a>     - Microsoft Agent Framework template
     ┣━━ <a href="https://github.com/StevenBtw/marimo-docs-mcp">marimo-docs-mcp</a>     - Marimo docs MCP server
     ┗━━ <a href="https://github.com/StevenBtw/uv-docs-mcp">uv-docs-mcp</a>         - UV docs MCP server
 </pre>
