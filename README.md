@@ -1,5 +1,5 @@
 # Hi there! I'm Steven, by the way.
-This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and building a graph database ecosystem. 
+This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and maintaining a graph database ecosystem. 
 
 ## About Me
 
