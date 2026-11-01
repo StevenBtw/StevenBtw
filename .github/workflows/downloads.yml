@@ -1,4 +1,4 @@
-name: Download stats
+name: Download stats and bonsai
 
 on:
   schedule:
@@ -31,8 +31,38 @@ jobs:
           PEPY_API_KEY: ${{ secrets.PEPY_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }} # release download counts; avoids the shared-runner rate limit
 
+      # The bonsai comes from gitbonsai's latest release. Until one exists, or if anything in these two steps
+      # fails, the current bonsai SVGs stay and the download cards still get committed.
+      - name: Install gitbonsai (latest release)
+        id: gitbonsai
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if ! gh release view --repo StevenBtw/gitbonsai > /dev/null 2>&1; then
+            echo "::notice::No gitbonsai release yet; keeping the current bonsai."
+            exit 0
+          fi
+          mkdir -p /tmp/gb
+          gh release download --repo StevenBtw/gitbonsai --pattern 'gitbonsai-x86_64-unknown-linux-musl.tar.gz*' --dir /tmp/gb
+          (cd /tmp/gb && sha256sum -c gitbonsai-x86_64-unknown-linux-musl.tar.gz.sha256)
+          tar -xzf /tmp/gb/gitbonsai-x86_64-unknown-linux-musl.tar.gz -C /tmp/gb
+          /tmp/gb/gitbonsai --version || true
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
+      - name: Grow the bonsai
+        if: steps.gitbonsai.outputs.ready == 'true'
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          /tmp/gb/gitbonsai collect StevenBtw --output /tmp/gb/snapshot.json
+          /tmp/gb/gitbonsai render /tmp/gb/snapshot.json --output-dir /tmp/gb/out
+          cp /tmp/gb/out/bonsai-light.svg /tmp/gb/out/bonsai-dark.svg assets/
+
+      # Commits as github-actions[bot], so the weekly update never counts as Steven's contribution.
       - name: Commit updated cards
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
-          commit_message: "Update download stats"
+          commit_message: "Update download stats and bonsai"
           file_pattern: "assets/*.svg data/history.json"
