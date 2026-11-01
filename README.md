@@ -1,13 +1,6 @@
 # Hi there! I'm Steven, by the way.
 This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and maintaining a graph database ecosystem. 
 
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/bonsai-dark.svg">
-    <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="400">
-  </picture>
-</p>
-
 ## About Me
 
 💻 Recreational programmer. I code for fun, to build and learn. 
@@ -17,6 +10,13 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 🌱 Mostly Python and Rust.
 
 🔚 But enough **About Me**.
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/bonsai-dark.svg">
+    <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="400">
+  </picture>
+</p>
 
 ## My Projects
 
