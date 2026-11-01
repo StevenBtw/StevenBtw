@@ -5,9 +5,9 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 💻 Recreational programmer. I code for fun, to build and learn. 
 
-🔭 Interested in architecture, optimization, robotics and (home) automation.
-
 🌱 Mostly Python and Rust.
+
+🔭 Interested in architecture, optimization, robotics and (home) automation.
 
 🌳 This is my GitHub activity, grown as a bonsai by [gitbonsai](https://github.com/StevenBtw/gitbonsai): years make it tall, every contribution makes it thicker, each language grows its own coloured leaves. It regrows every Sunday.
 
