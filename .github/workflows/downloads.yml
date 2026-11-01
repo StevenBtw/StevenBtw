@@ -74,7 +74,6 @@ jobs:
           echo "ready=true" >> "$GITHUB_OUTPUT"
 
       - name: Grow the bonsai
-        id: grow
         if: steps.gitbonsai.outputs.ready == 'true' || steps.built.outputs.ready == 'true'
         continue-on-error: true
         env:
@@ -83,16 +82,6 @@ jobs:
           /tmp/gb/gitbonsai collect StevenBtw --output /tmp/gb/snapshot.json
           /tmp/gb/gitbonsai render /tmp/gb/snapshot.json --output-dir /tmp/gb/out
           cp /tmp/gb/out/bonsai-light.svg /tmp/gb/out/bonsai-dark.svg assets/
-          echo "grown=true" >> "$GITHUB_OUTPUT"
-
-      # The README shows this one on wide screens only; on narrow ones the legend text would be too small to read.
-      - name: Grow the bonsai with its legend
-        if: steps.grow.outputs.grown == 'true'
-        continue-on-error: true
-        run: |
-          /tmp/gb/gitbonsai render /tmp/gb/snapshot.json --output-dir /tmp/gb/out-legend --legend left
-          cp /tmp/gb/out-legend/bonsai-light.svg assets/bonsai-legend-light.svg
-          cp /tmp/gb/out-legend/bonsai-dark.svg assets/bonsai-legend-dark.svg
 
       # Author and committer are both github-actions[bot]. The action's default author is whoever triggered the
       # run (Steven, also for the schedule), which would put every weekly update on his contribution graph.

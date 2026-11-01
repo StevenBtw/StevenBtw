@@ -9,18 +9,6 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 🔭 Interested in architecture, optimization, robotics and (home) automation.
 
-🌳 This is my GitHub activity, grown as a bonsai by [gitbonsai](https://github.com/StevenBtw/gitbonsai): years make it tall, every contribution makes it thicker, each language grows its own coloured leaves. It regrows every Sunday.
-
-<p align="center">
-  <!-- With its legend on wide screens (README column 760px and up); just the tree at 600px on smaller ones. -->
-  <picture>
-    <source media="(min-width: 1209px) and (prefers-color-scheme: dark)" srcset="assets/bonsai-legend-dark.svg" width="100%">
-    <source media="(min-width: 1209px)" srcset="assets/bonsai-legend-light.svg" width="100%">
-    <source media="(prefers-color-scheme: dark)" srcset="assets/bonsai-dark.svg">
-    <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="600">
-  </picture>
-</p>
-
 🔚 But enough **About Me**.
 
 ## Projects
@@ -63,3 +51,12 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
   <source media="(prefers-color-scheme: dark)" srcset="assets/downloads-dark.svg">
   <img alt="Package downloads across PyPI, crates.io, npm, Docker Hub, NuGet, GitHub Releases and pub.dev" src="assets/downloads-light.svg" width="100%">
 </picture>
+
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/bonsai-dark.svg">
+    <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="600">
+  </picture>
+  <br>
+  <sub>This bonsai tree reflects my GitHub activity. Want to know more? Check out <a href="https://github.com/StevenBtw/gitbonsai">gitbonsai</a>.</sub>
+</p>
