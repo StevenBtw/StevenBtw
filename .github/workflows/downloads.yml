@@ -90,7 +90,7 @@ jobs:
         if: steps.grow.outputs.grown == 'true'
         continue-on-error: true
         run: |
-          /tmp/gb/gitbonsai render /tmp/gb/snapshot.json --output-dir /tmp/gb/out-legend --legend right
+          /tmp/gb/gitbonsai render /tmp/gb/snapshot.json --output-dir /tmp/gb/out-legend --legend left
           cp /tmp/gb/out-legend/bonsai-light.svg assets/bonsai-legend-light.svg
           cp /tmp/gb/out-legend/bonsai-dark.svg assets/bonsai-legend-dark.svg
 
