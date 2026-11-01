@@ -58,7 +58,7 @@ def labels(svg):
 
 
 def bar(svg):
-    return re.findall(r'<rect x="([\d.]+)" y="\d+" width="([\d.]+)" height="8" fill="(#[0-9a-f]{6})"/>', svg)
+    return re.findall(r'<rect x="([\d.]+)" y="\d+" width="([\d.]+)" height="\d+" fill="(#[0-9a-f]{6})"/>', svg)
 
 
 @pytest.mark.parametrize("theme", ["light", "dark"])
@@ -161,7 +161,21 @@ def test_every_variant_leaves_room_for_its_legend(suffix):
     root = ET.fromstring(render_card(STATS, DAY, "light", shown, columns, width))
     assert root.get("width") == str(width)
     entries = len([t for t in root.iter(f"{SVG}text") if t.get("class") == "label"])
-    assert (width - 2 * 24) / (columns or entries) >= 95  # px per legend column at the drawn size
+    # A legend entry's second line holds the total and the 30-day number side by side: about 100px at most.
+    assert (width - 2 * 24) / (columns or entries) >= 98  # px per legend column at the drawn size
+
+
+def test_card_is_a_thin_strip():
+    root = ET.fromstring(render_card(STATS, DAY, "light"))
+    assert int(root.get("height")) <= 130
+
+
+def test_legend_puts_total_and_30_days_on_one_line():
+    root = ET.fromstring(render_card(STATS, DAY, "light"))
+    values = [t for t in root.iter(f"{SVG}text") if t.get("class") == "value"]
+    deltas = [t for t in root.iter(f"{SVG}text") if t.get("class") == "delta"]
+    assert [v.get("y") for v in values] == [d.get("y") for d in deltas]
+    assert all(float(d.get("x")) - float(v.get("x")) >= 44 for v, d in zip(values, deltas))
 
 
 def test_registry_colours_are_the_validated_palette_slots():

@@ -8,18 +8,19 @@ from dataclasses import dataclass
 from datetime import date
 from xml.sax.saxutils import escape
 
+# A thin strip: the bonsai is the profile's centrepiece, the downloads sit at the bottom.
 PAD = 24
-FOOT_Y = 30
-HEADLINE_Y = 48
-CAPTION_Y = 68
-BAR_Y = 90
-BAR_HEIGHT = 8
+FOOT_Y = 26
+HEADLINE_Y = 36
+CAPTION_Y = 52
+BAR_Y = 66
+BAR_HEIGHT = 6
 BAR_GAP = 2
-LEGEND_Y = 126  # label baseline of the first legend row
-VALUE_DY = 20  # from a legend label to its all-time number
-DELTA_DY = 38  # from a legend label to its 30-day number
-ROW_STEP = 62  # from one legend row to the next
-BOTTOM = 20
+LEGEND_Y = 94  # label baseline of the first legend row
+VALUE_DY = 18  # from a legend label to its total and 30-day number, side by side
+DELTA_DX = 44  # from a legend total to its 30-day number
+ROW_STEP = 44  # from one legend row to the next
+BOTTOM = 14
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 
 # Card variants, picked by the README's <picture> from the width of GitHub's README column. Each is drawn
@@ -29,7 +30,7 @@ VARIANTS = {
     "": (None, None, 800),  # column 760px and wider: every registry in one row
     "-md": (5, None, 640),  # column 600 to 759px: top 5 and Others
     "-sm": (4, None, 540),  # column 460 to 599px (up to 670px on some screens): top 4 and Others
-    "-xs": (4, 3, 340),  # column under 460px: top 4 and Others in two rows
+    "-xs": (4, 3, 360),  # column under 460px: top 4 and Others in two rows
 }
 
 # GitHub's code-block surface and text colours, so the card sits in the README like the projects box.
@@ -118,7 +119,7 @@ def render_card(
     columns = columns or max(1, len(entries))
     rows = max(1, math.ceil(len(entries) / columns))
     column = (width - 2 * PAD) / columns
-    height = LEGEND_Y + (rows - 1) * ROW_STEP + DELTA_DY + BOTTOM
+    height = LEGEND_Y + (rows - 1) * ROW_STEP + VALUE_DY + BOTTOM
     return "\n".join(
         [
             f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
@@ -127,11 +128,11 @@ def render_card(
             "<style>",
             "text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, "
             f"sans-serif; fill: {palette['text']}; }}",
-            ".big { font-size: 32px; font-weight: 700; }",
-            ".mid { font-size: 24px; font-weight: 600; }",
-            ".label, .value { font-size: 13px; }",
-            ".value { font-weight: 600; }",
-            ".caption, .delta, .foot { font-size: 12px; }",
+            ".big { font-size: 26px; font-weight: 700; }",
+            ".mid { font-size: 20px; font-weight: 600; }",
+            ".label, .delta, .foot { font-size: 12px; }",
+            ".value { font-size: 13px; font-weight: 600; }",
+            ".caption { font-size: 11px; }",
             f".caption, .delta, .foot {{ fill: {palette['muted']}; }}",
             "</style>",
             f'<rect width="{width}" height="{height}" rx="6" fill="{palette["bg"]}"/>',
@@ -186,7 +187,7 @@ def _bar(entries: list[RegistryStat], colors: dict[str, str], width: int) -> str
 
 
 def _legend(entries: list[RegistryStat], colors: dict[str, str], columns: int, column: float) -> str:
-    """Rows of evenly spaced columns, filled left to right: a dot and label, the total, then the 30-day number."""
+    """Rows of evenly spaced columns, filled left to right: a dot and label, then the total and 30-day number."""
     items = []
     for i, s in enumerate(entries):
         row, col = divmod(i, columns)
@@ -195,6 +196,6 @@ def _legend(entries: list[RegistryStat], colors: dict[str, str], columns: int, c
             f'<circle cx="{x + 5:.2f}" cy="{y - 4}" r="5" fill="{colors[s.key]}"/>'
             f'<text x="{x + 16:.2f}" y="{y}" class="label">{escape(s.label)}</text>'
             f'<text x="{x + 16:.2f}" y="{y + VALUE_DY}" class="value">{format_total(s.total)}</text>'
-            f'<text x="{x + 16:.2f}" y="{y + DELTA_DY}" class="delta">{format_delta(s.last30)}</text>'
+            f'<text x="{x + 16 + DELTA_DX:.2f}" y="{y + VALUE_DY}" class="delta">{format_delta(s.last30)}</text>'
         )
     return "".join(items)
