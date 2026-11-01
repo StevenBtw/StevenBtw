@@ -15,7 +15,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 30 # leaves room for building gitbonsai while it has no release
     steps:
       - uses: actions/checkout@v7
 
@@ -31,18 +31,41 @@ jobs:
           PEPY_API_KEY: ${{ secrets.PEPY_API_KEY }}
           GITHUB_TOKEN: ${{ github.token }} # release download counts; avoids the shared-runner rate limit
 
-      # The bonsai comes from gitbonsai's latest release. Until one exists, or if anything in these two steps
-      # fails, the current bonsai SVGs stay and the download cards still get committed.
+      # The bonsai comes from gitbonsai's latest release, or is built from source while there is none. If any
+      # bonsai step fails, the current bonsai SVGs stay and the download cards still get committed.
+      - name: Check for a gitbonsai release
+        id: release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view --repo StevenBtw/gitbonsai > /dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "::notice::No gitbonsai release yet; building it from source."
+          fi
+
+      - name: Set up Rust (gitbonsai's pinned toolchain)
+        if: steps.release.outputs.exists != 'true'
+        continue-on-error: true
+        uses: dtolnay/rust-toolchain@1.99.0
+
+      - name: Build gitbonsai from source
+        id: built
+        if: steps.release.outputs.exists != 'true'
+        continue-on-error: true
+        run: |
+          # SVG only: the default png feature pulls in resvg, which the profile does not need.
+          cargo install --locked --no-default-features --git https://github.com/StevenBtw/gitbonsai --root /tmp/gb-build
+          mkdir -p /tmp/gb && cp /tmp/gb-build/bin/gitbonsai /tmp/gb/gitbonsai
+          echo "ready=true" >> "$GITHUB_OUTPUT"
+
       - name: Install gitbonsai (latest release)
         id: gitbonsai
+        if: steps.release.outputs.exists == 'true'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          if ! gh release view --repo StevenBtw/gitbonsai > /dev/null 2>&1; then
-            echo "::notice::No gitbonsai release yet; keeping the current bonsai."
-            exit 0
-          fi
           mkdir -p /tmp/gb
           gh release download --repo StevenBtw/gitbonsai --pattern 'gitbonsai-x86_64-unknown-linux-musl.tar.gz*' --dir /tmp/gb
           (cd /tmp/gb && sha256sum -c gitbonsai-x86_64-unknown-linux-musl.tar.gz.sha256)
@@ -51,7 +74,7 @@ jobs:
           echo "ready=true" >> "$GITHUB_OUTPUT"
 
       - name: Grow the bonsai
-        if: steps.gitbonsai.outputs.ready == 'true'
+        if: steps.gitbonsai.outputs.ready == 'true' || steps.built.outputs.ready == 'true'
         continue-on-error: true
         env:
           GH_TOKEN: ${{ github.token }}
