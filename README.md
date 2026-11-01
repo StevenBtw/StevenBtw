@@ -20,7 +20,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 🔚 But enough **About Me**.
 
-## My Projects
+## Projects
 
 <pre>
 ┏━━ 🗺️ <b>Architecture</b>
