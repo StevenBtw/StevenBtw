@@ -1,7 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="640" height="126" viewBox="0 0 640 126" role="img" aria-labelledby="title">
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="148" viewBox="0 0 640 148" role="img" aria-labelledby="title">
 <title id="title">Package downloads: 850,929 all time, 88,349 in the last 30 days. PyPI 698,784 all time, 59,125 in the last 30 days; crates.io 85,912 all time, 22,554 in the last 30 days; npm 52,760 all time, 6,043 in the last 30 days; Docker 9,258 all time, unknown in the last 30 days; NuGet 3,371 all time, unknown in the last 30 days; GitHub 844 all time, unknown in the last 30 days; pub.dev unknown all time, 627 in the last 30 days.</title>
 <style>
 text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif; fill: #f0f6fc; }
+.title { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace; font-size: 14px; font-weight: 700; }
 .big { font-size: 26px; font-weight: 700; }
 .mid { font-size: 20px; font-weight: 600; }
 .label, .delta, .foot { font-size: 12px; }
@@ -9,12 +10,13 @@ text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', 
 .caption { font-size: 11px; }
 .caption, .delta, .foot { fill: #9198a1; }
 </style>
-<rect width="640" height="126" rx="6" fill="#151b23"/>
-<text x="24" y="36" class="big">851K</text>
-<text x="24" y="52" class="caption">all time</text>
-<text x="122.67" y="36" class="mid">+88.3K</text>
-<text x="122.67" y="52" class="caption">last 30 days</text>
-<text x="616" y="26" class="foot" text-anchor="end">updated 1 Nov</text>
-<clipPath id="bar"><rect x="24" y="66" width="592" height="6" rx="4"/></clipPath><g clip-path="url(#bar)"><rect x="24.00" y="66" width="477.94" height="6" fill="#3987e5"/><rect x="503.94" y="66" width="58.76" height="6" fill="#c98500"/><rect x="564.70" y="66" width="36.09" height="6" fill="#d55181"/><rect x="602.79" y="66" width="6.33" height="6" fill="#008300"/><rect x="611.12" y="66" width="2.31" height="6" fill="#9085e9"/><rect x="615.42" y="66" width="0.58" height="6" fill="#adb5bf"/></g>
-<circle cx="29.00" cy="90" r="5" fill="#3987e5"/><text x="40.00" y="94" class="label">PyPI</text><text x="40.00" y="112" class="value">699K</text><text x="84.00" y="112" class="delta">+59.1K</text><circle cx="127.67" cy="90" r="5" fill="#c98500"/><text x="138.67" y="94" class="label">crates.io</text><text x="138.67" y="112" class="value">85.9K</text><text x="182.67" y="112" class="delta">+22.6K</text><circle cx="226.33" cy="90" r="5" fill="#d55181"/><text x="237.33" y="94" class="label">npm</text><text x="237.33" y="112" class="value">52.8K</text><text x="281.33" y="112" class="delta">+6.04K</text><circle cx="325.00" cy="90" r="5" fill="#008300"/><text x="336.00" y="94" class="label">Docker</text><text x="336.00" y="112" class="value">9.26K</text><text x="380.00" y="112" class="delta">n/a</text><circle cx="423.67" cy="90" r="5" fill="#9085e9"/><text x="434.67" y="94" class="label">NuGet</text><text x="434.67" y="112" class="value">3.37K</text><text x="478.67" y="112" class="delta">n/a</text><circle cx="522.33" cy="90" r="5" fill="#adb5bf"/><text x="533.33" y="94" class="label">Others</text><text x="533.33" y="112" class="value">844</text><text x="577.33" y="112" class="delta">+627</text>
+<rect width="640" height="148" rx="6" fill="#151b23"/>
+<text x="16" y="24" class="title">Package downloads</text>
+<text x="16" y="58" class="big">851K</text>
+<text x="16" y="74" class="caption">all time</text>
+<text x="117.33" y="58" class="mid">+88.3K</text>
+<text x="117.33" y="74" class="caption">last 30 days</text>
+<text x="624" y="24" class="foot" text-anchor="end">updated 1 Nov</text>
+<clipPath id="bar"><rect x="16" y="88" width="608" height="6" rx="4"/></clipPath><g clip-path="url(#bar)"><rect x="16.00" y="88" width="491.08" height="6" fill="#3987e5"/><rect x="509.08" y="88" width="60.38" height="6" fill="#c98500"/><rect x="571.45" y="88" width="37.08" height="6" fill="#d55181"/><rect x="610.53" y="88" width="6.51" height="6" fill="#008300"/><rect x="619.04" y="88" width="2.37" height="6" fill="#9085e9"/><rect x="623.41" y="88" width="0.59" height="6" fill="#adb5bf"/></g>
+<circle cx="21.00" cy="112" r="5" fill="#3987e5"/><text x="32.00" y="116" class="label">PyPI</text><text x="32.00" y="134" class="value">699K</text><text x="76.00" y="134" class="delta">+59.1K</text><circle cx="122.33" cy="112" r="5" fill="#c98500"/><text x="133.33" y="116" class="label">crates.io</text><text x="133.33" y="134" class="value">85.9K</text><text x="177.33" y="134" class="delta">+22.6K</text><circle cx="223.67" cy="112" r="5" fill="#d55181"/><text x="234.67" y="116" class="label">npm</text><text x="234.67" y="134" class="value">52.8K</text><text x="278.67" y="134" class="delta">+6.04K</text><circle cx="325.00" cy="112" r="5" fill="#008300"/><text x="336.00" y="116" class="label">Docker</text><text x="336.00" y="134" class="value">9.26K</text><text x="380.00" y="134" class="delta">n/a</text><circle cx="426.33" cy="112" r="5" fill="#9085e9"/><text x="437.33" y="116" class="label">NuGet</text><text x="437.33" y="134" class="value">3.37K</text><text x="481.33" y="134" class="delta">n/a</text><circle cx="527.67" cy="112" r="5" fill="#adb5bf"/><text x="538.67" y="116" class="label">Others</text><text x="538.67" y="134" class="value">844</text><text x="582.67" y="134" class="delta">+627</text>
 </svg>
