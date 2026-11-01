@@ -11,6 +11,13 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 🔚 But enough **About Me**.
 
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/bonsai-dark.svg">
+    <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="400">
+  </picture>
+</p>
+
 ## My Projects
 
 <pre>
@@ -45,13 +52,6 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
     ┣━━ <a href="https://github.com/StevenBtw/marimo-docs-mcp">marimo-docs-mcp</a>     - Marimo docs MCP server
     ┗━━ <a href="https://github.com/StevenBtw/uv-docs-mcp">uv-docs-mcp</a>         - UV docs MCP server
 </pre>
-
-<p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="assets/bonsai-dark.svg">
-    <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="400">
-  </picture>
-</p>
 
 ## Package Downloads
 
