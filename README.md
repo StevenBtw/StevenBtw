@@ -21,7 +21,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ┃   ┣━━ <a href="https://github.com/StevenBtw/solvOR">solvOR</a>              - Pure Python optimization solvers
 ┃   ┗━━ <a href="https://github.com/StevenBtw/benchmORk">benchmORk</a>           - OR solver benchmarking
 ┃   
-┣━━ 🎨 <b>Anywidgets</b>
+┣━━ 🌌 <b>Anywidgets</b>
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-graph">anywidget-graph</a>     - Graph visualization for notebooks
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-vector">anywidget-vector</a>    - 3D vector visualization
 ┃   ┗━━ <a href="https://github.com/StevenBtw/anywidget-archimate">anywidget-archimate</a> - ArchiMate viewer for notebooks
