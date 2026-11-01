@@ -83,9 +83,13 @@ jobs:
           /tmp/gb/gitbonsai render /tmp/gb/snapshot.json --output-dir /tmp/gb/out
           cp /tmp/gb/out/bonsai-light.svg /tmp/gb/out/bonsai-dark.svg assets/
 
-      # Commits as github-actions[bot], so the weekly update never counts as Steven's contribution.
+      # Author and committer are both github-actions[bot]. The action's default author is whoever triggered the
+      # run (Steven, also for the schedule), which would put every weekly update on his contribution graph.
       - name: Commit updated cards
         uses: stefanzweifel/git-auto-commit-action@v7
         with:
+          commit_user_name: github-actions[bot]
+          commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
+          commit_author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           commit_message: "Update download stats and bonsai"
           file_pattern: "assets/*.svg data/history.json"
