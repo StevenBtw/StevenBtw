@@ -9,7 +9,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 
 🌱 Mostly Python and Rust.
 
-🔚 But enough **About Me**.
+🌳 This is my GitHub activity, grown as a bonsai by [gitbonsai](https://github.com/StevenBtw/gitbonsai): years make it tall, every contribution makes it thicker, each language grows its own coloured leaves. It regrows every Sunday.
 
 <p align="center">
   <picture>
@@ -17,6 +17,8 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
     <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="600">
   </picture>
 </p>
+
+🔚 But enough **About Me**.
 
 ## My Projects
 
