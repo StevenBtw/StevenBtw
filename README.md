@@ -58,5 +58,5 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
     <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="600">
   </picture>
   <br>
-  <sub>This bonsai tree reflects my GitHub activity. Want to know more? Check out <a href="https://github.com/StevenBtw/gitbonsai">gitbonsai</a>.</sub>
+  <sub>This bonsai tree reflects my GitHub activity. Want to know more? Check out <a href="https://github.com/marketplace/actions/gitbonsai">gitbonsai</a>.</sub>
 </p>
