@@ -12,7 +12,10 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 🌳 This is my GitHub activity, grown as a bonsai by [gitbonsai](https://github.com/StevenBtw/gitbonsai): years make it tall, every contribution makes it thicker, each language grows its own coloured leaves. It regrows every Sunday.
 
 <p align="center">
+  <!-- With its legend on wide screens (README column 760px and up); just the tree at 600px on smaller ones. -->
   <picture>
+    <source media="(min-width: 1209px) and (prefers-color-scheme: dark)" srcset="assets/bonsai-legend-dark.svg" width="100%">
+    <source media="(min-width: 1209px)" srcset="assets/bonsai-legend-light.svg" width="100%">
     <source media="(prefers-color-scheme: dark)" srcset="assets/bonsai-dark.svg">
     <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="600">
   </picture>
@@ -36,26 +39,17 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-vector">anywidget-vector</a>    - 3D vector visualization
 ┃   ┗━━ <a href="https://github.com/StevenBtw/anywidget-archimate">anywidget-archimate</a> - ArchiMate viewer for notebooks
 ┃      
-┣━━ 🎡 <b>Grafeo Ecosystem</b>
-┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo">grafeo</a>              - Embeddable graph database
-┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-web">grafeo-web</a>          - Browser-based via WASM 
-┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-server">grafeo-server</a>       - HTTP server & web UI
-┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-memory">grafeo-memory</a>       - AI memory layer for agents
-┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-mcp">grafeo-mcp</a>          - MCP server for AI agents
-┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-langchain">grafeo-langchain</a>    - LangChain integration
-┃   ┣━━ <a href="https://github.com/GrafeoDB/grafeo-llamaindex">grafeo-llamaindex</a>   - LlamaIndex integration
-┃   ┣━━ <a href="https://github.com/GrafeoDB/boltr">boltr</a>               - Bolt v5.x wire protocol
-┃   ┗━━ <a href="https://github.com/GrafeoDB/gql-wire-protocol">gwp</a>                 - GQL Wire Protocol (gRPC)
-┃     
-┗━━ 🗄️ <b>Archived</b>
-    ┣━━ <a href="https://github.com/StevenBtw/AoC_2025">AoC_2025</a>            - Advent of Code, one tool per day
-    ┣━━ <a href="https://github.com/StevenBtw/aoc_helper">aoc_helper</a>          - AoC helper scripts
-    ┣━━ <a href="https://github.com/StevenBtw/agent-framework-cookiecutter">agent-framework</a>     - Microsoft Agent Framework template
-    ┣━━ <a href="https://github.com/StevenBtw/marimo-docs-mcp">marimo-docs-mcp</a>     - Marimo docs MCP server
-    ┗━━ <a href="https://github.com/StevenBtw/uv-docs-mcp">uv-docs-mcp</a>         - UV docs MCP server
+┗━━ 🎡 <b>Grafeo Ecosystem</b>
+    ┣━━ <a href="https://github.com/GrafeoDB/grafeo">grafeo</a>              - Embeddable graph database
+    ┣━━ <a href="https://github.com/GrafeoDB/grafeo-web">grafeo-web</a>          - Browser-based via WASM 
+    ┣━━ <a href="https://github.com/GrafeoDB/grafeo-server">grafeo-server</a>       - HTTP server & web UI
+    ┣━━ <a href="https://github.com/GrafeoDB/grafeo-memory">grafeo-memory</a>       - AI memory layer for agents
+    ┣━━ <a href="https://github.com/GrafeoDB/grafeo-mcp">grafeo-mcp</a>          - MCP server for AI agents
+    ┣━━ <a href="https://github.com/GrafeoDB/grafeo-langchain">grafeo-langchain</a>    - LangChain integration
+    ┣━━ <a href="https://github.com/GrafeoDB/grafeo-llamaindex">grafeo-llamaindex</a>   - LlamaIndex integration
+    ┣━━ <a href="https://github.com/GrafeoDB/boltr">boltr</a>               - Bolt v5.x wire protocol
+    ┗━━ <a href="https://github.com/GrafeoDB/gql-wire-protocol">gwp</a>                 - GQL Wire Protocol (gRPC)
 </pre>
-
-## Package Downloads
 
 <!-- Card variants by README column width: xs under 460px, sm to 600px, md to 760px, full card above.
      GitHub's column narrows again at 768px and 1012px wide screens (sidebar), hence two ranges for xs. -->

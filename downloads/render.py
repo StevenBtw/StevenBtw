@@ -8,15 +8,16 @@ from dataclasses import dataclass
 from datetime import date
 from xml.sax.saxutils import escape
 
-# A thin strip: the bonsai is the profile's centrepiece, the downloads sit at the bottom.
-PAD = 24
-FOOT_Y = 26
-HEADLINE_Y = 36
-CAPTION_Y = 52
-BAR_Y = 66
+# A thin strip under the projects box: the bonsai is the profile's centrepiece. The card carries its own
+# title, set like a group label in the projects box, and the same 16px inset so the two line up.
+PAD = 16
+TITLE_Y = 24  # the title and "updated" share this baseline
+HEADLINE_Y = 58
+CAPTION_Y = 74
+BAR_Y = 88
 BAR_HEIGHT = 6
 BAR_GAP = 2
-LEGEND_Y = 94  # label baseline of the first legend row
+LEGEND_Y = 116  # label baseline of the first legend row
 VALUE_DY = 18  # from a legend label to its total and 30-day number, side by side
 DELTA_DX = 44  # from a legend total to its 30-day number
 ROW_STEP = 44  # from one legend row to the next
@@ -128,6 +129,8 @@ def render_card(
             "<style>",
             "text { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, "
             f"sans-serif; fill: {palette['text']}; }}",
+            ".title { font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', "
+            "monospace; font-size: 14px; font-weight: 700; }",
             ".big { font-size: 26px; font-weight: 700; }",
             ".mid { font-size: 20px; font-weight: 600; }",
             ".label, .delta, .foot { font-size: 12px; }",
@@ -136,12 +139,13 @@ def render_card(
             f".caption, .delta, .foot {{ fill: {palette['muted']}; }}",
             "</style>",
             f'<rect width="{width}" height="{height}" rx="6" fill="{palette["bg"]}"/>',
+            f'<text x="{PAD}" y="{TITLE_Y}" class="title">Package downloads</text>',
             f'<text x="{PAD}" y="{HEADLINE_Y}" class="big">{format_total(total)}</text>',
             f'<text x="{PAD}" y="{CAPTION_Y}" class="caption">all time</text>',
             # The 30-day headline lines up with the second legend column.
             f'<text x="{PAD + column:.2f}" y="{HEADLINE_Y}" class="mid">{format_delta(last30)}</text>',
             f'<text x="{PAD + column:.2f}" y="{CAPTION_Y}" class="caption">last 30 days</text>',
-            f'<text x="{width - PAD}" y="{FOOT_Y}" class="foot" text-anchor="end">'
+            f'<text x="{width - PAD}" y="{TITLE_Y}" class="foot" text-anchor="end">'
             f"updated {updated.day} {MONTHS[updated.month - 1]}</text>",
             _bar(entries, colors, width),
             _legend(entries, colors, columns, column),

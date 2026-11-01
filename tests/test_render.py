@@ -4,7 +4,7 @@ from datetime import date
 
 import pytest
 
-from downloads.render import COLORS, OTHERS, VARIANTS, RegistryStat, format_count, format_delta, render_card
+from downloads.render import COLORS, OTHERS, PAD, VARIANTS, RegistryStat, format_count, format_delta, render_card
 
 SVG = "{http://www.w3.org/2000/svg}"
 DAY = date(2026, 10, 11)
@@ -76,8 +76,18 @@ def test_card_is_drawn_at_the_readme_column_width():
     assert root.get("viewBox").startswith("0 0 800 ")
 
 
-def test_card_leaves_the_title_to_the_readme_heading():
-    assert "Package downloads" not in texts(render_card(STATS, DAY, "light"))
+def test_card_carries_its_own_title_beside_the_update_date():
+    root = ET.fromstring(render_card(STATS, DAY, "light"))
+    found = {t.text: t for t in root.iter(f"{SVG}text")}
+    assert found["Package downloads"].get("class") == "title"
+    assert found["Package downloads"].get("y") == found["updated 11 Oct"].get("y")
+
+
+def test_card_text_starts_at_the_projects_box_inset():
+    # GitHub pads the projects <pre> by 16px; at the drawn width the card's text starts at the same inset.
+    assert PAD == 16
+    title = next(t for t in ET.fromstring(render_card(STATS, DAY, "light")).iter(f"{SVG}text") if t.text == "Package downloads")
+    assert title.get("x") == "16"
 
 
 @pytest.mark.parametrize(("theme", "surface"), [("light", "#f6f8fa"), ("dark", "#151b23")])
@@ -121,7 +131,7 @@ def test_bar_segments_follow_the_legend_and_use_theme_colours():
     keys = ["pypi", "npm", "crates", "nuget", "docker", "github"]
     assert [fill for _, _, fill in segments] == [COLORS["dark"][k] for k in keys]
     widths = [float(w) for _, w, _ in segments]
-    assert sum(widths) == pytest.approx(800 - 2 * 24 - 5 * 2, abs=0.05)  # full width less padding and 5 gaps
+    assert sum(widths) == pytest.approx(800 - 2 * PAD - 5 * 2, abs=0.05)  # full width less padding and 5 gaps
     assert widths[0] / widths[1] == pytest.approx(812 / 201, rel=0.01)  # PyPI, then npm
 
 
@@ -162,12 +172,12 @@ def test_every_variant_leaves_room_for_its_legend(suffix):
     assert root.get("width") == str(width)
     entries = len([t for t in root.iter(f"{SVG}text") if t.get("class") == "label"])
     # A legend entry's second line holds the total and the 30-day number side by side: about 100px at most.
-    assert (width - 2 * 24) / (columns or entries) >= 98  # px per legend column at the drawn size
+    assert (width - 2 * PAD) / (columns or entries) >= 98  # px per legend column at the drawn size
 
 
 def test_card_is_a_thin_strip():
     root = ET.fromstring(render_card(STATS, DAY, "light"))
-    assert int(root.get("height")) <= 130
+    assert int(root.get("height")) <= 150
 
 
 def test_legend_puts_total_and_30_days_on_one_line():
