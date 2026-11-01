@@ -14,7 +14,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="assets/bonsai-dark.svg">
-    <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="400">
+    <img alt="My bonsai, grown from my GitHub activity by gitbonsai" src="assets/bonsai-light.svg" width="600">
   </picture>
 </p>
 
