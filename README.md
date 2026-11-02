@@ -34,7 +34,7 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
     ┣━━ <a href="https://github.com/GrafeoDB/grafeo-mcp">grafeo-mcp</a>          - MCP server for AI agents
     ┣━━ <a href="https://github.com/GrafeoDB/grafeo-langchain">grafeo-langchain</a>    - LangChain integration
     ┣━━ <a href="https://github.com/GrafeoDB/grafeo-llamaindex">grafeo-llamaindex</a>   - LlamaIndex integration
-    ┣━━ <a href="https://github.com/GrafeoDB/graph-bench">graph-bench</a>   - A graph database benchmark tool
+    ┣━━ <a href="https://github.com/GrafeoDB/graph-bench">graph-bench</a>         - Graph database benchmark
     ┣━━ <a href="https://github.com/GrafeoDB/boltr">boltr</a>               - Bolt v5.x wire protocol
     ┗━━ <a href="https://github.com/GrafeoDB/gql-wire-protocol">gwp</a>                 - GQL Wire Protocol (gRPC)
 </pre>
