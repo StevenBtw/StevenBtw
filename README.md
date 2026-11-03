@@ -22,9 +22,9 @@ This is my personal GitHub for side projects and experiments. Currently tinkerin
 ┃   ┗━━ <a href="https://github.com/StevenBtw/benchmORk">benchmORk</a>           - OR solver benchmarking
 ┃   
 ┣━━ 🌌 <b>Anywidgets</b>
-┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-graph">anywidget-graph</a>     - Graph visualization for notebooks
-┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-vector">anywidget-vector</a>    - 3D vector visualization
-┃   ┗━━ <a href="https://github.com/StevenBtw/anywidget-archimate">anywidget-archimate</a> - ArchiMate viewer for notebooks
+┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-graph">anywidget-graph</a>     - Graph visualization widget
+┃   ┣━━ <a href="https://github.com/GrafeoDB/anywidget-vector">anywidget-vector</a>    - 3D vector visualization widget
+┃   ┗━━ <a href="https://github.com/StevenBtw/anywidget-archimate">anywidget-archimate</a> - ArchiMate 3.2 viewer widget 
 ┃      
 ┗━━ 🎡 <b>Grafeo Ecosystem</b>
     ┣━━ <a href="https://github.com/GrafeoDB/grafeo">grafeo</a>              - Embeddable graph database
