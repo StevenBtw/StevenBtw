@@ -56,6 +56,18 @@
 <a href="https://github.com/GrafeoDB/grafeo-llamaindex"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-grafeo-llamaindex-dark.svg"><img alt="grafeo-llamaindex" src="assets/repo-grafeo-llamaindex-light.svg"></picture></a>
 </p>
 
+<picture>
+  <source media="(max-width: 556px) and (prefers-color-scheme: dark), (min-width: 768px) and (max-width: 844px) and (prefers-color-scheme: dark)" srcset="assets/project-anywidgets-narrow-dark.svg">
+  <source media="(max-width: 556px), (min-width: 768px) and (max-width: 844px)" srcset="assets/project-anywidgets-narrow-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="assets/project-anywidgets-dark.svg">
+  <img alt="anywidgets: Graph, 3D vector and ArchiMate viewers for Python notebooks." src="assets/project-anywidgets-light.svg" width="100%">
+</picture>
+<p>
+<a href="https://github.com/GrafeoDB/anywidget-graph"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-anywidget-graph-dark.svg"><img alt="anywidget-graph" src="assets/repo-anywidget-graph-light.svg"></picture></a>
+<a href="https://github.com/GrafeoDB/anywidget-vector"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-anywidget-vector-dark.svg"><img alt="anywidget-vector" src="assets/repo-anywidget-vector-light.svg"></picture></a>
+<a href="https://github.com/StevenBtw/anywidget-archimate"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-anywidget-archimate-dark.svg"><img alt="anywidget-archimate" src="assets/repo-anywidget-archimate-light.svg"></picture></a>
+</p>
+
 <a href="https://solvor.ai">
 <picture>
   <source media="(max-width: 556px) and (prefers-color-scheme: dark), (min-width: 768px) and (max-width: 844px) and (prefers-color-scheme: dark)" srcset="assets/project-solvor-narrow-dark.svg">
@@ -67,18 +79,6 @@
 <p>
 <a href="https://github.com/StevenBtw/solvOR"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-solvor-dark.svg"><img alt="solvOR" src="assets/repo-solvor-light.svg"></picture></a>
 <a href="https://github.com/StevenBtw/benchmORk"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-benchmork-dark.svg"><img alt="benchmORk" src="assets/repo-benchmork-light.svg"></picture></a>
-</p>
-
-<picture>
-  <source media="(max-width: 556px) and (prefers-color-scheme: dark), (min-width: 768px) and (max-width: 844px) and (prefers-color-scheme: dark)" srcset="assets/project-anywidgets-narrow-dark.svg">
-  <source media="(max-width: 556px), (min-width: 768px) and (max-width: 844px)" srcset="assets/project-anywidgets-narrow-light.svg">
-  <source media="(prefers-color-scheme: dark)" srcset="assets/project-anywidgets-dark.svg">
-  <img alt="anywidgets: Graph, 3D vector and ArchiMate viewers for Python notebooks." src="assets/project-anywidgets-light.svg" width="100%">
-</picture>
-<p>
-<a href="https://github.com/GrafeoDB/anywidget-graph"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-anywidget-graph-dark.svg"><img alt="anywidget-graph" src="assets/repo-anywidget-graph-light.svg"></picture></a>
-<a href="https://github.com/GrafeoDB/anywidget-vector"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-anywidget-vector-dark.svg"><img alt="anywidget-vector" src="assets/repo-anywidget-vector-light.svg"></picture></a>
-<a href="https://github.com/StevenBtw/anywidget-archimate"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-anywidget-archimate-dark.svg"><img alt="anywidget-archimate" src="assets/repo-anywidget-archimate-light.svg"></picture></a>
 </p>
 <!-- projects:end -->
 
