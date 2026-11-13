@@ -3,10 +3,14 @@ name = "profile-downloads"
 version = "0.1.0"
 description = "Weekly package downloads card for the StevenBtw GitHub profile"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "brotli>=1.2.1",
+    "fonttools>=4.68.0",
+    "uharfbuzz>=0.57.0",
+]
 
 [dependency-groups]
-dev = ["pytest>=8"]
+dev = ["pytest>=9"]
 
 [tool.uv]
 package = false
