@@ -6,15 +6,8 @@
   <source media="(max-width: 556px) and (prefers-color-scheme: dark), (min-width: 768px) and (max-width: 844px) and (prefers-color-scheme: dark)" srcset="assets/header-narrow-dark.svg">
   <source media="(max-width: 556px), (min-width: 768px) and (max-width: 844px)" srcset="assets/header-narrow-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg">
-  <img alt="Hi there! I'm Steven, by the way. This is my personal GitHub for side projects and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and maintaining a graph database ecosystem." src="assets/header-light.svg" width="100%">
+  <img alt="Hi there! I'm Steven, by the way. Recreational programmer. I code for fun, to build and learn. This is my personal GitHub for side projects, research and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and maintaining a graph database ecosystem." src="assets/header-light.svg" width="100%">
 </picture>
-
-## About Me
-
-- Recreational programmer. I code for fun, to build and learn.
-- Mostly Python and Rust.
-- Interested in architecture, optimization, robotics and (home) automation.
-- But enough **About Me**.
 
 ## Projects
 

@@ -5,14 +5,15 @@ from __future__ import annotations
 from visuals import document, hairline, tokens
 from visuals.type import Typesetter, measure, wrap
 
-EYEBROW = "Side projects and experiments"
+EYEBROW = "Side projects, research and experiments"
 GREETING = ("Hi there! I’m Steven, ", "by the way.")
 NOW = (
     "Tinkering with architecture model derivation, the occasional ethical hacking "
     "and maintaining a graph database ecosystem."
 )
+SUBTITLE = "Recreational programmer. I code for fun, to build and learn."
 TITLE = "Hi there! I’m Steven, by the way."
-DESC = f"My personal GitHub for side projects and experiments. Now: {NOW}"
+DESC = f"{SUBTITLE} My personal GitHub for side projects, research and experiments. Now: {NOW}"
 
 # Drawn width -> layout. Wide sets the greeting on one line; narrow splits it after "Hi there!".
 VARIANTS = {"": 800, "-narrow": 400}
@@ -36,7 +37,13 @@ def render_header(theme: str, width: int = 800) -> str:
             x = measure("newsreader", roman, size)
             parts.append(ts.text("newsreader-italic", italic, x, y, size, ink, role="greeting"))
         y += size * 1.12
-    y += 4 - size * 1.12 + 22
+    y -= size * 1.12  # back to the greeting's last baseline
+    sub_size, sub_leading = (17, 25) if wide else (15, 22)
+    y += sub_size + 14
+    for line in wrap("hanken", SUBTITLE, sub_size, width):
+        parts.append(ts.text("hanken", line, 0, y, sub_size, muted, role="subtitle"))
+        y += sub_leading
+    y += 22 - sub_leading
     parts.append(hairline(0, y, width, rule))
     label_w = 56 if wide else 0
     text_size, leading = (16, 25) if wide else (15, 23)

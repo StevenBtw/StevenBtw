@@ -178,3 +178,16 @@ def test_bonsai_links_to_gitbonsai_without_a_caption():
     bonsai = bonsai[: bonsai.index("</p>")]
     assert '<a href="https://github.com/StevenBtw/gitbonsai">' in bonsai and "assets/bonsai-light.svg" in bonsai
     assert "<sub>" not in bonsai
+
+
+@pytest.mark.parametrize("width", HEADER_VARIANTS.values())
+def test_header_carries_the_subtitle_between_greeting_and_rule(width):
+    from visuals.header import SUBTITLE
+
+    svg = render_header("light", width)
+    assert " ".join(runs(svg, "subtitle")) == SUBTITLE
+    root = ET.fromstring(svg)
+    sub_y = max(float(g.get("data-y")) for g in root.iter(f"{SVG}g") if g.get("class") == "subtitle")
+    greet_y = max(float(g.get("data-y")) for g in root.iter(f"{SVG}g") if g.get("class") == "greeting")
+    rule_y = float(re.search(r'<path d="M0 ([\d.]+)H', svg).group(1))
+    assert greet_y < sub_y < rule_y
