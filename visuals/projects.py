@@ -9,7 +9,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from xml.sax.saxutils import escape, quoteattr
 
-from visuals import document, frame, mark, px, tokens
+from visuals import document, frame, mark, marks, px, tokens
 from visuals.type import Typesetter, measure, wrap
 
 
@@ -71,15 +71,15 @@ GROUPS = (
         "https://grafeo.ai", "instrument-500", "instrument", "jetbrains-mono", label="instrument", beam=True,
     ),
     Group(
-        "solvor", "solvor", "Optimization", "solvOR",
-        "Pure Python optimization solvers, plus OR solver benchmarking.",
-        repos("StevenBtw", "solvOR", "benchmORk"), "https://solvor.ai", None, "redhat-text", "redhat-mono",
-    ),
-    Group(
         "anywidgets", "anywidgets", "Notebook widgets", "anywidgets",
         "Graph, 3D vector and ArchiMate viewers for Python notebooks.",
         repos("GrafeoDB", "anywidget-graph", "anywidget-vector") + repos("StevenBtw", "anywidget-archimate"),
         None, None, None, "jetbrains-mono",  # no website yet: the banner links nowhere, the chips do
+    ),
+    Group(
+        "solvor", "solvor", "Optimization", "solvOR",
+        "Pure Python optimization solvers, plus OR solver benchmarking.",
+        repos("StevenBtw", "solvOR", "benchmORk"), "https://solvor.ai", None, "redhat-text", "redhat-mono",
     ),
 )
 
@@ -94,8 +94,8 @@ def render_banner(group: Group, theme: str, width: int = 800) -> str:
     pad = 24 if wide else 20
     mark_size = 64 if wide else 48
     name_size, body_size = (32, 16) if wide else (28, 15)
-    has_mark = group.key != "solvor"  # solvOR's mark is its wordmark, set in the name's place
-    text_x = pad + mark_size + 24 if has_mark else pad
+    has_mark = True  # every project has a mark; solvOR's sits before its wordmark
+    text_x = pad + mark_size + 24
     count = f"{len(group.repos)} repo{'s' if len(group.repos) != 1 else ''}"
     face, size, tracking = eyebrow_style(group)
     eyebrow = f"{group.eyebrow} · {count}"
@@ -213,24 +213,6 @@ def _mark(group: Group, theme: str, t: dict[str, str], x: float, y: float, size:
         return mark(f"grafeo-mark-64-{theme}.svg", x, y, size, size)
     if group.project == "deriva":
         return mark(f"deriva-{theme}.svg", x, y, size, size)
-    return _widget_graph(t, x, y, size)
-
-
-def _widget_graph(t: dict[str, str], x: float, y: float, size: float) -> str:
-    """A small graph in the anywidgets node style: a 2px ring in the category colour over a 38% fill of the
-    same colour on an opaque surface base, joined by hairline edges."""
-    s = size / 64
-    nodes = [(14, 18, 1), (46, 12, 2), (32, 36, 3), (12, 50, 4), (52, 46, 5)]
-    edges = [(0, 2), (1, 2), (2, 3), (2, 4), (0, 1), (3, 4)]
-    out = [f'<g transform="translate({x:g} {y:g}) scale({s:g})">']
-    for a, b in edges:
-        (x1, y1, _), (x2, y2, _) = nodes[a], nodes[b]
-        out.append(f'<path d="M{x1} {y1}L{x2} {y2}" stroke="{t["edge"]}" stroke-width="{1 / s:g}"/>')
-    for cx, cy, slot in nodes:
-        color = t[f"data-{slot}"]
-        out.append(
-            f'<circle cx="{cx}" cy="{cy}" r="6" fill="{t["surface"]}"/>'
-            f'<circle cx="{cx}" cy="{cy}" r="6" fill="{color}" fill-opacity="0.38" stroke="{color}" stroke-width="2"/>'
-        )
-    out.append("</g>")
-    return "".join(out)
+    if group.key == "solvor":  # level sets, a search stepping in, the optimum in gold
+        return marks.solvor(t, x, y, size)
+    return marks.trio(t, x, y, size)  # the anywidgets: graph, vector and ArchiMate in one slot
