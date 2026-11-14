@@ -24,6 +24,10 @@ BY_KEY = {g.key: g for g in GROUPS}
 HEADERS = [
     ("grafeo", "grafeo", "Graph (and vector) database", "Grafeo", "The embeddable graph database, written in Rust."),
     (
+        "grafeodb", "grafeo", "GitHub organisation", "GrafeoDB",
+        "The embeddable graph database, and everything built around it.",
+    ),
+    (
         "grafeo-memory", "grafeo-ai", "Grafeo AI", "grafeo-memory",
         "Memory for agents, in one file: a graph with vectors and history, with any LLM.",
     ),
@@ -45,6 +49,7 @@ HEADERS = [
 # Where each repo lives on GitHub (owner/name), for the README snippet's URLs.
 REPO_PATHS = {
     "grafeo": "GrafeoDB/grafeo",
+    "grafeodb": "GrafeoDB/.github",
     "grafeo-memory": "GrafeoDB/grafeo-memory",
     "anywidget-graph": "GrafeoDB/anywidget-graph",
     "anywidget-vector": "GrafeoDB/anywidget-vector",

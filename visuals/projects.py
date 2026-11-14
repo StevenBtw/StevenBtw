@@ -96,12 +96,9 @@ def render_banner(group: Group, theme: str, width: int = 800) -> str:
     name_size, body_size = (32, 16) if wide else (28, 15)
     has_mark = True  # every project has a mark; solvOR's sits before its wordmark
     text_x = pad + mark_size + 24
-    count = f"{len(group.repos)} repo{'s' if len(group.repos) != 1 else ''}"
     face, size, tracking = eyebrow_style(group)
-    eyebrow = f"{group.eyebrow} · {count}"
-    if measure(face, _case(group, eyebrow), size, tracking) > width - text_x - pad:  # the chips count the repos
-        eyebrow = group.eyebrow
-    eyebrow = _case(group, eyebrow)
+    # Just the project's kind: the chips under the banner already show its repos
+    eyebrow = _case(group, group.eyebrow)
 
     eyebrow_y = pad + 12
     name_y = eyebrow_y + 12 + name_size
