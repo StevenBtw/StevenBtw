@@ -32,6 +32,18 @@ HEADERS = [
         "Memory for agents, in one file: a graph with vectors and history, with any LLM.",
     ),
     (
+        "grafeo-mcp", "grafeo-ai", "Grafeo AI", "grafeo-mcp",
+        "An MCP server that gives agents a Grafeo database: queries, search and graph algorithms.",
+    ),
+    (
+        "grafeo-langchain", "grafeo-ai", "Grafeo AI", "grafeo-langchain",
+        "LangChain graph and vector stores backed by Grafeo, in one file.",
+    ),
+    (
+        "grafeo-llamaindex", "grafeo-ai", "Grafeo AI", "grafeo-llamaindex",
+        "A LlamaIndex property graph store backed by Grafeo, in one file.",
+    ),
+    (
         "anywidget-graph", "anywidgets", "Notebook widgets", "anywidget-graph",
         "Interactive graph visualization for Python notebooks.",
     ),
@@ -51,6 +63,9 @@ REPO_PATHS = {
     "grafeo": "GrafeoDB/grafeo",
     "grafeodb": "GrafeoDB/.github",
     "grafeo-memory": "GrafeoDB/grafeo-memory",
+    "grafeo-mcp": "GrafeoDB/grafeo-mcp",
+    "grafeo-langchain": "GrafeoDB/grafeo-langchain",
+    "grafeo-llamaindex": "GrafeoDB/grafeo-llamaindex",
     "anywidget-graph": "GrafeoDB/anywidget-graph",
     "anywidget-vector": "GrafeoDB/anywidget-vector",
     "anywidget-archimate": "StevenBtw/anywidget-archimate",
