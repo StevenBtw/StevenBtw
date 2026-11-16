@@ -1,56 +1,47 @@
-"""Render the downloads card as a static SVG in the profile identity: outlined text, no scripts, no external fonts."""
+"""Render the downloads box and its registry chips as static SVGs in the profile identity (outlined text).
+
+The box follows a project banner's layout without a mark: eyebrow, the 30-day total in the name slot, a tagline
+and a thin stacked bar. The legend sits outside the box as chips, one per registry, like the repo chips under a
+banner: each chip is labelled with its name and value, so no registry is told apart by colour alone.
+"""
 
 from __future__ import annotations
 
-import math
 from collections.abc import Iterable
 from dataclasses import dataclass
 from datetime import date
 
 from visuals import document, frame, px, tokens
-from visuals.type import Typesetter
+from visuals.projects import CHIP_GAP, CHIP_HEIGHT
+from visuals.type import Typesetter, measure, wrap
 
-# A thin strip at the foot of the profile, in the profile identity (grond.st field notes): a hairline frame
-# on GitHub's canvas, a mono eyebrow for the title and the date, Hanken Grotesk with tabular figures for numbers.
-PAD = 16
-TITLE_Y = 26  # the title and "updated" share this baseline
-HEADLINE_Y = 60
-CAPTION_Y = 77
-BAR_Y = 90
-BAR_HEIGHT = 6
-BAR_GAP = 2
-LEGEND_Y = 118  # label baseline of the first legend row
-VALUE_DY = 18  # from a legend label to its total and 30-day number, side by side
-DELTA_DX = 44  # from a legend total to its 30-day number
-ROW_STEP = 44  # from one legend row to the next
-BOTTOM = 14
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
-NUMBERS = ("tnum",)  # tabular figures, so the columns of numbers line up
+NUMBERS = ("tnum",)  # tabular figures, so numbers keep their width from week to week
+EYEBROW = "PACKAGE DOWNLOADS · LAST 30 DAYS"
+NOTE = "PyPI counted without mirrors, from pypistats.org."
+WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
 
-# Card variants, picked by the README's <picture> from the width of GitHub's README column. Each is drawn
-# close to the width it is shown at, so the text stays readable: file suffix -> (registries shown on their
-# own, legend columns, drawn width). The rest fold into Others; None columns means one row.
-VARIANTS = {
-    "": (None, None, 800),  # column 760px and wider: every registry in one row
-    "-md": (5, None, 640),  # column 600 to 759px: top 5 and Others
-    "-sm": (4, None, 540),  # column 460 to 599px (up to 670px on some screens): top 4 and Others
-    "-xs": (4, 3, 360),  # column under 460px: top 4 and Others in two rows
-}
+# Drawn width per variant, as the project banners: the README picks one by column width.
+VARIANTS = {"": 800, "-narrow": 400}
+BAR_HEIGHT = 8
+BAR_GAP = 2  # unfilled: GitHub's page shows through, since the box has no fill
+MIN_SEGMENT = 2.0
 
-# Each registry keeps one slot of the profile's data palette (grond.st data-1 to data-7), in the order the
-# registries usually sort by size, so neighbours in the bar are neighbouring slots of the validated palette.
+# Each registry keeps one slot of the profile's data palette (grond.st data-1 to data-7). The bar and the chips
+# always draw in this order, so colour and position follow a registry from week to week and the adjacent pairs
+# drawn are exactly the ones the palette was validated for.
 SLOTS = {"pypi": 1, "crates": 2, "npm": 3, "docker": 4, "nuget": 5, "github": 6, "pubdev": 7}
 
 
 def palette(theme: str) -> dict[str, str]:
-    """Text, rule and registry colours for one theme, from the grond.st tokens. Others is the muted text grey."""
+    """Text, rule and registry colours for one theme, from the grond.st tokens."""
     t = tokens("grond-st")[theme]
     return {
         "text": t["foreground"],
         "muted": t["muted-foreground"],
         "rule": t["border-strong"],
         "radius": t["radius-box"],
-        "others": t["muted-foreground"],
+        "control-radius": t["radius-control"],
     } | {key: t[f"data-{slot}"] for key, slot in SLOTS.items()}
 
 
@@ -58,83 +49,123 @@ def palette(theme: str) -> dict[str, str]:
 class RegistryStat:
     key: str
     label: str
-    total: int | None  # None when the registry has no all-time number (pub.dev)
-    last30: int | None
+    total: int | None  # all time; kept in the history, not drawn
+    last30: int | None  # None while a snapshot-based registry has no 30-day number yet
 
 
 def format_count(n: int) -> str:
-    """Three significant digits with a K/M/B suffix: 999, 1K, 1.23K, 48.3K, 812K, 1.24M."""
+    """One rule for every value: whole numbers under 1,000, then one decimal with K, M or B (a trailing .0 is
+    dropped): 773, 1K, 1.2K, 8.8K, 46.5K, 812K, 1.2M. A value that rounds up to 1,000 moves to the next unit."""
     if n < 1000:
         return str(n)
     for suffix, scale in (("K", 1e3), ("M", 1e6), ("B", 1e9)):
-        value = n / scale
-        decimals = 2 if value < 10 else 1 if value < 100 else 0
-        rounded = round(value, decimals)
+        rounded = round(n / scale, 1)
         if rounded < 1000 or suffix == "B":
-            text = f"{rounded:.{decimals}f}"
-            if "." in text:
-                text = text.rstrip("0").rstrip(".")
-            return text + suffix
+            return f"{rounded:.1f}".removesuffix(".0") + suffix
+    raise AssertionError("unreachable")
 
 
-def format_total(n: int | None) -> str:
+def box_alt(stats: list[RegistryStat]) -> str:
+    """The box's alt text, from the same numbers as the image."""
+    entries = in_slot_order(stats)
+    first, note = tagline(entries)
+    across = first.removesuffix(".").replace("Across", "across", 1)
+    return f"Package downloads in the last 30 days: {format_value(_known_sum(s.last30 for s in entries))} {across}. {note}".strip()
+
+
+def chip_alt(stat: RegistryStat) -> str:
+    if stat.last30 is None:
+        return f"{stat.label}: no 30-day number yet"
+    return f"{stat.label}: {format_count(stat.last30)} downloads in the last 30 days"
+
+
+def format_value(n: int | None) -> str:
     return "n/a" if n is None else format_count(n)
 
 
-def format_delta(n: int | None) -> str:
-    return "n/a" if n is None else f"+{format_count(n)}"
+def in_slot_order(stats: Iterable[RegistryStat]) -> list[RegistryStat]:
+    return sorted(stats, key=lambda s: SLOTS[s.key])
 
 
-def largest_first(stats: list[RegistryStat]) -> list[RegistryStat]:
-    """Sorted by all-time downloads; unknown totals go last and ties keep the given order."""
-    return sorted(stats, key=lambda s: (s.total is None, -(s.total or 0)))
+def tagline(stats: list[RegistryStat]) -> tuple[str, str]:
+    count = len(stats)
+    first = f"Across {WORDS.get(count, str(count))} registr{'y' if count == 1 else 'ies'}."
+    return first, NOTE if any(s.key == "pypi" for s in stats) else ""
 
 
-def fold_others(stats: list[RegistryStat], shown: int | None) -> list[RegistryStat]:
-    """The `shown` largest registries, then one Others entry for the rest (only when two or more are left)."""
-    ordered = largest_first(stats)
-    if shown is None or len(ordered) - shown < 2:
-        return ordered
-    rest = ordered[shown:]
-    others = RegistryStat("others", "Others", _known_sum(s.total for s in rest), _known_sum(s.last30 for s in rest))
-    return ordered[:shown] + [others]
+def render_card(stats: list[RegistryStat], updated: date, theme: str, width: int = 800) -> str:
+    """The downloads box for one theme ("light" or "dark") at one drawn width. See VARIANTS."""
+    colors = palette(theme)
+    ink, muted = colors["text"], colors["muted"]
+    ts = Typesetter()
+    wide = width >= 600
+    pad = 24 if wide else 20
+    body_size = 16 if wide else 15
+    entries = in_slot_order(stats)
+    last30 = _known_sum(s.last30 for s in entries)
+    stamp = f"UPDATED {updated.day} {MONTHS[updated.month - 1].upper()}"
+
+    eyebrow_y = pad + 12
+    name_y = eyebrow_y + 12 + 32
+    parts = [ts.text("plex-mono", EYEBROW, pad, eyebrow_y, 11, muted, tracking=1.4, role="title")]
+    stamp_on_top = measure("plex-mono", EYEBROW, 11, 1.4) + 24 + measure("plex-mono", stamp, 11, 1.4) <= width - 2 * pad
+    if stamp_on_top:
+        parts.append(ts.text("plex-mono", stamp, width - pad, eyebrow_y, 11, muted, "end", 1.4, role="foot"))
+    parts.append(ts.text("hanken-600", format_value(last30), pad, name_y, 32, ink, features=NUMBERS, role="big"))
+
+    # The tagline wraps after its first sentence when it does not fit on one line.
+    first, note = tagline(entries)
+    whole = f"{first} {note}".strip()
+    avail = width - 2 * pad
+    if measure("hanken", whole, body_size) <= avail:
+        lines = [whole]
+    else:
+        lines = wrap("hanken", first, body_size, avail) + (wrap("hanken", note, body_size, avail) if note else [])
+    y = name_y + 28
+    for line in lines:
+        parts.append(ts.text("hanken", line, pad, y, body_size, muted, role="tagline"))
+        y += body_size * 1.5
+    bar_y = y - body_size * 1.5 + 18
+    parts.append(_bar(entries, colors, pad, bar_y, width - 2 * pad))
+    height = bar_y + BAR_HEIGHT + pad
+    if not stamp_on_top:  # narrow: the date moves under the bar
+        parts.append(ts.text("plex-mono", stamp, pad, height + 2, 11, muted, tracking=1.4, role="foot"))
+        height += 2 + pad - 6
+    height = round(height)
+    parts.insert(0, frame(width, height, colors["rule"], px(colors["radius"])))
+    return document(width, height, describe(entries, last30), "".join(parts), ts.defs())
 
 
-def render_card(
-    stats: list[RegistryStat],
-    updated: date,
-    theme: str,
-    shown: int | None = None,
-    columns: int | None = None,
-    width: int = 800,
-) -> str:
-    """One card variant for one theme ("light" or "dark"), registries largest first. See VARIANTS."""
+def render_chip(stat: RegistryStat, theme: str) -> str:
+    """A registry's legend chip: a dot in its data slot (the only coloured part), its name and 30-day value in
+    text colours with tabular figures, inside the profile's control outline."""
     colors = palette(theme)
     ts = Typesetter()
-    entries = fold_others(stats, shown)
-    total = _known_sum(s.total for s in stats)
-    last30 = _known_sum(s.last30 for s in stats)
-    columns = columns or max(1, len(entries))
-    rows = max(1, math.ceil(len(entries) / columns))
-    column = (width - 2 * PAD) / columns
-    height = LEGEND_Y + (rows - 1) * ROW_STEP + VALUE_DY + BOTTOM
-    ink, muted = colors["text"], colors["muted"]
-    stamp = f"updated {updated.day} {MONTHS[updated.month - 1]}"
-    body = "".join(
-        [
-            frame(width, height, colors["rule"], px(colors["radius"])),
-            ts.text("plex-mono", "PACKAGE DOWNLOADS", PAD, TITLE_Y, 11, muted, tracking=1.4, role="title"),
-            ts.text("plex-mono", stamp.upper(), width - PAD, TITLE_Y, 11, muted, "end", 1.4, role="foot"),
-            ts.text("hanken-600", format_total(total), PAD, HEADLINE_Y, 26, ink, features=NUMBERS, role="big"),
-            ts.text("hanken", "all time", PAD, CAPTION_Y, 12, muted, role="caption"),
-            # The 30-day headline lines up with the second legend column.
-            ts.text("hanken-600", format_delta(last30), PAD + column, HEADLINE_Y, 20, ink, features=NUMBERS, role="mid"),
-            ts.text("hanken", "last 30 days", PAD + column, CAPTION_Y, 12, muted, role="caption"),
-            _bar(entries, colors, width),
-            _legend(entries, colors, columns, column, ts),
-        ]
+    size, inset, dot = 12.5, 11, 4
+    value = format_value(stat.last30)
+    label_x = inset + 2 * dot + 7
+    value_x = label_x + measure("hanken", stat.label, size) + 7
+    box = round(value_x + measure("hanken-600", value, size, features=NUMBERS) + inset)
+    body = (
+        f'<rect x="0.5" y="0.5" width="{box - 1}" height="{CHIP_HEIGHT - 1}" rx="{px(colors["control-radius"]):g}" '
+        f'fill="none" stroke="{colors["rule"]}" stroke-width="1"/>'
+        f'<circle cx="{inset + dot}" cy="{CHIP_HEIGHT / 2:g}" r="{dot}" fill="{colors[stat.key]}"/>'
+        + ts.text("hanken", stat.label, label_x, 18.5, size, colors["text"], role="label")
+        + ts.text("hanken-600", value, value_x, 18.5, size, colors["text"], features=NUMBERS, role="value")
     )
-    return document(width, height, _describe(stats, total, last30), body, ts.defs())
+    title = f"{stat.label}: {_words(stat.last30)} downloads in the last 30 days"
+    return document(box + CHIP_GAP, CHIP_HEIGHT + CHIP_GAP, title, body, ts.defs())
+
+
+def describe(stats: list[RegistryStat], last30: int | None) -> str:
+    parts = [
+        f"{s.label} {_words(s.last30)}{' (without mirrors)' if s.key == 'pypi' else ''}" for s in in_slot_order(stats)
+    ]
+    return f"Package downloads in the last 30 days: {_words(last30)}. " + "; ".join(parts) + "."
+
+
+def _words(n: int | None) -> str:
+    return "unknown" if n is None else f"{n:,}"
 
 
 def _known_sum(values: Iterable[int | None]) -> int | None:
@@ -142,47 +173,33 @@ def _known_sum(values: Iterable[int | None]) -> int | None:
     return sum(known) if known else None
 
 
-def _describe(stats: list[RegistryStat], total: int | None, last30: int | None) -> str:
-    def words(n: int | None) -> str:
-        return "unknown" if n is None else f"{n:,}"
+def segment_widths(values: list[int], usable: float) -> list[float]:
+    """True proportions of `usable`, except that no segment is drawn narrower than MIN_SEGMENT; the others
+    shrink in proportion to make room."""
+    total = sum(values)
+    widths = [usable * v / total for v in values]
+    small = [w < MIN_SEGMENT for w in widths]
+    if any(small):
+        rest = usable - MIN_SEGMENT * sum(small)
+        large_total = sum(v for v, s in zip(values, small) if not s)
+        widths = [MIN_SEGMENT if s else rest * v / large_total for v, s in zip(values, small)]
+    return widths
 
-    parts = [
-        f"{s.label} {words(s.total)} all time, {words(s.last30)} in the last 30 days" for s in largest_first(stats)
-    ]
-    return f"Package downloads: {words(total)} all time, {words(last30)} in the last 30 days. " + "; ".join(parts) + "."
 
-
-def _bar(entries: list[RegistryStat], colors: dict[str, str], width: int) -> str:
-    shown = [s for s in entries if s.total]
-    total = sum(s.total for s in shown)
-    if not total:
+def _bar(entries: list[RegistryStat], colors: dict[str, str], x0: float, y: float, width: float) -> str:
+    """Segments in slot order with unfilled gaps; only the bar's two outer ends are rounded."""
+    shown = [s for s in entries if s.last30]
+    if not shown:
         return ""
-    bar_width = width - 2 * PAD
-    usable = bar_width - BAR_GAP * (len(shown) - 1)
-    segments, x = [], float(PAD)
-    for s in shown:
-        w = usable * s.total / total
+    usable = width - BAR_GAP * (len(shown) - 1)
+    segments, x = [], x0
+    for s, w in zip(shown, segment_widths([s.last30 for s in shown], usable)):
         segments.append(
-            f'<rect x="{x:.2f}" y="{BAR_Y}" width="{w:.2f}" height="{BAR_HEIGHT}" fill="{colors[s.key]}"/>'
+            f'<rect x="{x:.2f}" y="{y:g}" width="{w:.2f}" height="{BAR_HEIGHT}" fill="{colors[s.key]}"/>'
         )
         x += w + BAR_GAP
     return (
-        f'<clipPath id="bar"><rect x="{PAD}" y="{BAR_Y}" width="{bar_width}" height="{BAR_HEIGHT}" '
+        f'<clipPath id="bar"><rect x="{x0:g}" y="{y:g}" width="{width:g}" height="{BAR_HEIGHT}" '
         f'rx="{px(colors["radius"]):g}"/></clipPath>'
         f'<g clip-path="url(#bar)">{"".join(segments)}</g>'
     )
-
-
-def _legend(entries: list[RegistryStat], colors: dict[str, str], columns: int, column: float, ts: Typesetter) -> str:
-    """Rows of evenly spaced columns, filled left to right: a dot and label, then the total and 30-day number."""
-    items = []
-    for i, s in enumerate(entries):
-        row, col = divmod(i, columns)
-        x, y = PAD + col * column, LEGEND_Y + row * ROW_STEP
-        items.append(
-            f'<circle cx="{x + 4:.2f}" cy="{y - 4}" r="4" fill="{colors[s.key]}"/>'
-            + ts.text("hanken", s.label, x + 14, y, 12, colors["muted"], role="label")
-            + ts.text("hanken-600", format_total(s.total), x + 14, y + VALUE_DY, 13, colors["text"], features=NUMBERS, role="value")
-            + ts.text("hanken", format_delta(s.last30), x + 14 + DELTA_DX, y + VALUE_DY, 12, colors["muted"], features=NUMBERS, role="delta")
-        )
-    return "".join(items)

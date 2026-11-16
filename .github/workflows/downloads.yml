@@ -92,4 +92,4 @@ jobs:
           commit_user_email: 41898282+github-actions[bot]@users.noreply.github.com
           commit_author: github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
           commit_message: "Update download stats and bonsai"
-          file_pattern: "assets/*.svg data/history.json"
+          file_pattern: "assets/*.svg data/history.json README.md" # README: the downloads alt texts carry the numbers

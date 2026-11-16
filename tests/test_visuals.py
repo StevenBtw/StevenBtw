@@ -127,11 +127,32 @@ def test_banners_link_to_websites_and_chips_to_repos():
     assert {g.url for g in GROUPS} >= {"https://grafeo.dev", "https://grafeo.ai", "https://deriva.dev", "https://solvor.ai"}
 
 
-def test_downloads_card_is_kept_but_hidden():
+def test_downloads_box_closes_the_page_with_a_linked_chip_per_registry():
+    from downloads.registries import PAGES
+    from downloads.render import SLOTS
+    from visuals.readme import DOWNLOADS_END, DOWNLOADS_START
+
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
-    comment = readme[readme.index("<!-- Package downloads card"):]
-    assert "assets/downloads-light.svg" in comment and comment.rstrip().endswith("-->")
-    assert "downloads-light.svg" not in readme[: readme.index("<!-- Package downloads card")]
+    block = readme.split(DOWNLOADS_START, 1)[1].split(DOWNLOADS_END, 1)[0]
+    assert readme.index("assets/bonsai-light.svg") < readme.index(DOWNLOADS_START)  # under the bonsai, last
+    assert readme.rstrip().endswith(DOWNLOADS_END)
+    hrefs = re.findall(r'<a href="([^"]+)"><picture><source [^>]*srcset="assets/registry-', block)
+    assert hrefs == [PAGES[key] for key in SLOTS]  # chips in slot order, each to its registry page
+    assert "<a href" not in block.split("<p>", 1)[0]  # the box itself is no link
+    assert re.search(r'alt="Package downloads in the last 30 days: [\d.]+[KMB]? across seven registries\.', block)
+    assert len(re.findall(r'alt="[^"]+: [\d.]+[KMB]? downloads in the last 30 days"', block)) == len(SLOTS)
+
+
+def test_visuals_leaves_the_downloads_block_to_the_weekly_run(tmp_path):
+    from visuals.readme import DOWNLOADS_END, DOWNLOADS_START, update
+
+    readme = tmp_path / "README.md"
+    original = (ROOT / "README.md").read_text(encoding="utf-8")
+    readme.write_text(original, encoding="utf-8")
+    update(readme)
+    after = readme.read_text(encoding="utf-8")
+    assert after.split(DOWNLOADS_START, 1)[1] == original.split(DOWNLOADS_START, 1)[1]
+    assert DOWNLOADS_END in after
 
 
 def test_readme_only_references_existing_assets():
@@ -168,8 +189,16 @@ def test_only_grafeo_ai_carries_the_beam_in_its_effect_colours(theme):
     t = tokens("grafeo-ai")[theme]
     svg = render_banner(next(g for g in GROUPS if g.key == "grafeo-ai"), theme)
     assert all(t[f"effect-{i}"] in svg for i in (1, 2, 3))
-    eyebrow = next(g for g in ET.fromstring(svg).iter(f"{SVG}g") if g.get("class") == "eyebrow")
-    assert eyebrow.get("data-text") != eyebrow.get("data-text").upper()  # no mono uppercase outside buttons
+
+
+
+@pytest.mark.parametrize("width", BANNER_VARIANTS.values())
+def test_every_banner_eyebrow_is_mono_uppercase(width):
+    # The eyebrow is profile chrome: one style on all five banners, Grafeo AI included (design ruling 2026-11-16).
+    for group in GROUPS:
+        eyebrow = next(g for g in ET.fromstring(render_banner(group, "light", width)).iter(f"{SVG}g") if g.get("class") == "eyebrow")
+        assert eyebrow.get("data-text") == eyebrow.get("data-text").upper()
+        assert eyebrow_style(group) == (group.mono, 11, 1.3)
 
 
 def test_bonsai_links_to_gitbonsai_without_a_caption():

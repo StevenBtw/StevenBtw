@@ -14,7 +14,8 @@ from pathlib import Path
 
 from downloads.history import History, last30_from_snapshots, latest, load, prune, record, save, snapshots
 from downloads.registries import FETCHERS, LABELS, ORDER, SNAPSHOT_30D, Counts
-from downloads.render import VARIANTS, RegistryStat, render_card
+from downloads.render import VARIANTS, RegistryStat, render_card, render_chip
+from visuals.readme import update_downloads
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -101,10 +102,15 @@ def main(
     save(history_path, history)
     assets = root / "assets"
     assets.mkdir(exist_ok=True)
-    for suffix, (shown, columns, width) in VARIANTS.items():
-        for theme in ("light", "dark"):
-            card = render_card(stats, today, theme, shown, columns, width)
+    for theme in ("light", "dark"):
+        for suffix, width in VARIANTS.items():
+            card = render_card(stats, today, theme, width)
             (assets / f"downloads{suffix}-{theme}.svg").write_text(card, encoding="utf-8")
+        for s in stats:
+            (assets / f"registry-{s.key}-{theme}.svg").write_text(render_chip(s, theme), encoding="utf-8")
+    readme = root / "README.md"
+    if readme.exists():  # the alt texts carry this week's numbers too
+        update_downloads(readme, stats)
     for s in stats:
         total = "n/a" if s.total is None else f"{s.total:,}"
         recent = "n/a" if s.last30 is None else f"{s.last30:,}"

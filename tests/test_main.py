@@ -144,15 +144,15 @@ def test_reshaped_response_through_a_real_fetcher_falls_back_to_the_last_snapsho
     assert "::warning::PyPI solvor" in capsys.readouterr().out
 
 
-def test_main_writes_history_and_the_wide_and_compact_cards(tmp_path, capsys):
+def test_main_writes_history_the_box_and_a_chip_per_registry(tmp_path, capsys):
     (tmp_path / "packages.toml").write_text(PACKAGES, encoding="utf-8")
     assert main(tmp_path, TODAY, fetchers(), sleep=lambda s: None) == 0
     history = json.loads((tmp_path / "data" / "history.json").read_text(encoding="utf-8"))
     assert history["docker"]["grafeo/grafeo-server"] == [{"date": "2026-11-15", "total": 300, "last30": None}]
     assert history["pubdev"]["grafeo"] == [{"date": "2026-11-15", "total": None, "last30": 40}]
-    for variant in ("", "-md", "-sm", "-xs"):
-        for theme in ("light", "dark"):
-            svg = (tmp_path / "assets" / f"downloads{variant}-{theme}.svg").read_text(encoding="utf-8")
+    for theme in ("light", "dark"):
+        for name in ("downloads", "downloads-narrow", "registry-pypi", "registry-pubdev", "registry-docker"):
+            svg = (tmp_path / "assets" / f"{name}-{theme}.svg").read_text(encoding="utf-8")
             assert svg.startswith("<svg")
     out = capsys.readouterr().out
     assert "PyPI" in out and "pub.dev" in out
@@ -165,3 +165,14 @@ def test_main_writes_nothing_when_every_fetch_fails(tmp_path, capsys):
     assert not (tmp_path / "data").exists()
     assert not (tmp_path / "assets").exists()
     assert "::error::" in capsys.readouterr().out
+
+
+def test_main_rewrites_the_readme_downloads_block_with_this_weeks_numbers(tmp_path):
+    from visuals.readme import DOWNLOADS_END, DOWNLOADS_START
+
+    (tmp_path / "packages.toml").write_text(PACKAGES, encoding="utf-8")
+    (tmp_path / "README.md").write_text(f"# x\n\n{DOWNLOADS_START}\nold\n{DOWNLOADS_END}\n", encoding="utf-8")
+    assert main(tmp_path, TODAY, fetchers(), sleep=lambda s: None) == 0
+    text = (tmp_path / "README.md").read_text(encoding="utf-8")
+    assert "old" not in text and text.startswith("# x\n")
+    assert "pub.dev: 40 downloads in the last 30 days" in text

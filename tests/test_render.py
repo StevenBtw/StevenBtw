@@ -4,99 +4,107 @@ from datetime import date
 
 import pytest
 
-from downloads.render import PAD, SLOTS, VARIANTS, RegistryStat, format_count, format_delta, palette, render_card
+from downloads.render import (
+    BAR_GAP,
+    box_alt,
+    chip_alt,
+    BAR_HEIGHT,
+    EYEBROW,
+    MIN_SEGMENT,
+    NOTE,
+    SLOTS,
+    VARIANTS,
+    RegistryStat,
+    describe,
+    format_count,
+    format_value,
+    palette,
+    render_card,
+    render_chip,
+    segment_widths,
+)
 from visuals import tokens
+from visuals.projects import CHIP_GAP, CHIP_HEIGHT
 
 SVG = "{http://www.w3.org/2000/svg}"
-DAY = date(2026, 10, 11)
+DAY = date(2026, 11, 16)
 
 STATS = [  # in fetch order, the way collect() returns them
-    RegistryStat("pypi", "PyPI", 812_000, 31_000),
-    RegistryStat("crates", "crates.io", 150_000, 6_000),
-    RegistryStat("docker", "Docker", 15_000, None),
-    RegistryStat("nuget", "NuGet", 22_000, None),
-    RegistryStat("npm", "npm", 201_000, 9_000),
-    RegistryStat("github", "GitHub", 750, None),
-    RegistryStat("pubdev", "pub.dev", None, 408),
+    RegistryStat("pypi", "PyPI", 737_301, 46_451),
+    RegistryStat("crates", "crates.io", 99_123, 25_761),
+    RegistryStat("docker", "Docker", 10_980, 2_700),
+    RegistryStat("nuget", "NuGet", 3_549, 773),
+    RegistryStat("npm", "npm", 59_771, 8_793),
+    RegistryStat("github", "GitHub", 1_285, 507),
+    RegistryStat("pubdev", "pub.dev", None, 1_155),
 ]
-LARGEST_FIRST = ["PyPI", "npm", "crates.io", "NuGet", "Docker", "GitHub", "pub.dev"]
+SLOT_ORDER = ["pypi", "crates", "npm", "docker", "nuget", "github", "pubdev"]
+SEGMENT = r'<rect x="([\d.]+)" y="[\d.]+" width="([\d.]+)" height="\d+" fill="(#[0-9a-f]{6})"/>'
+
+
+def runs(svg, role=None):
+    return [
+        g
+        for g in ET.fromstring(svg).iter(f"{SVG}g")
+        if g.get("data-text") is not None and role in (None, g.get("class"))
+    ]
+
+
+def texts(svg, role=None):
+    return [g.get("data-text") for g in runs(svg, role)]
+
+
+def bar(svg):
+    return re.findall(SEGMENT, svg)
 
 
 @pytest.mark.parametrize(
     ("n", "expected"),
     [
         (0, "0"),
-        (999, "999"),
-        (1_000, "1K"),
-        (1_234, "1.23K"),
-        (9_999, "10K"),
-        (48_300, "48.3K"),
+        (773, "773"),
+        (999, "999"),  # under 1,000: a whole number
+        (1_000, "1K"),  # from 1,000: thousands with one decimal, a trailing .0 dropped
+        (1_160, "1.2K"),
+        (8_790, "8.8K"),
+        (46_451, "46.5K"),
         (99_999, "100K"),
         (812_000, "812K"),
-        (999_499, "999K"),
-        (999_950, "1M"),
-        (1_240_000, "1.24M"),
+        (999_499, "999.5K"),
+        (999_950, "1M"),  # rounds up to 1,000K, so it moves to the next unit
+        (1_240_000, "1.2M"),  # millions with one decimal
         (12_345_678, "12.3M"),
         (2_500_000_000, "2.5B"),
     ],
 )
-def test_format_count(n, expected):
+def test_format_count_uses_one_rule_for_every_value(n, expected):
     assert format_count(n) == expected
 
 
-def test_format_delta():
-    assert format_delta(31_000) == "+31K"
-    assert format_delta(0) == "+0"
-    assert format_delta(None) == "n/a"
-
-
-def runs(svg):
-    """Outlined text runs: each <g> keeps its string in data-text and its anchor point in data-x, data-y."""
-    return [g for g in ET.fromstring(svg).iter(f"{SVG}g") if g.get("data-text") is not None]
-
-
-def texts(svg):
-    return [g.get("data-text") for g in runs(svg)]
-
-
-def labels(svg):
-    return [g for g in runs(svg) if g.get("class") == "label"]
-
-
-def bar(svg):
-    return re.findall(r'<rect x="([\d.]+)" y="\d+" width="([\d.]+)" height="\d+" fill="(#[0-9a-f]{6})"/>', svg)
+def test_format_value():
+    assert format_value(46_451) == "46.5K"
+    assert format_value(None) == "n/a"
 
 
 @pytest.mark.parametrize("theme", ["light", "dark"])
-def test_card_is_valid_svg_with_headline_numbers(theme):
-    shown = texts(render_card(STATS, DAY, theme))
-    assert "1.2M" in shown  # 1,200,750 all time; pub.dev has no all-time number
-    assert "+46.4K" in shown  # 31K + 6K + 9K + 408; Docker, NuGet and GitHub unknown
-    assert "UPDATED 11 OCT" in shown
+@pytest.mark.parametrize("width", VARIANTS.values())
+def test_box_leads_with_the_30_day_total(theme, width):
+    svg = render_card(STATS, DAY, theme, width)
+    assert ET.fromstring(svg).get("width") == str(width)
+    assert texts(svg, "title") == [EYEBROW]
+    assert texts(svg, "big") == ["86.1K"]  # 86,140: every registry has a 30-day number
+    assert texts(svg, "foot") == ["UPDATED 16 NOV"]
+    assert "n/a" not in texts(svg)  # no all-time column, so no hole in it
 
 
-def test_card_is_drawn_at_the_readme_column_width():
-    # GitHub's profile README column is 800px on desktop; the README scales the image to 100% of it.
-    root = ET.fromstring(render_card(STATS, DAY, "light"))
-    assert root.get("width") == "800"
-    assert root.get("viewBox").startswith("0 0 800 ")
-
-
-def test_card_carries_its_own_title_beside_the_update_date():
-    found = {g.get("data-text"): g for g in runs(render_card(STATS, DAY, "light"))}
-    assert found["PACKAGE DOWNLOADS"].get("class") == "title"
-    assert found["PACKAGE DOWNLOADS"].get("data-y") == found["UPDATED 11 OCT"].get("data-y")
-
-
-def test_card_text_starts_at_a_16px_inset():
-    assert PAD == 16
-    title = next(g for g in runs(render_card(STATS, DAY, "light")) if g.get("data-text") == "PACKAGE DOWNLOADS")
-    assert title.get("data-x") == "16"
+def test_box_never_shows_all_time_numbers():
+    shown = texts(render_card(STATS, DAY, "light"))
+    for all_time in ("737K", "99.1K", "11K", "3.55K", "59.8K", "1.29K"):
+        assert all_time not in shown
 
 
 @pytest.mark.parametrize("theme", ["light", "dark"])
-def test_card_is_a_hairline_frame_on_githubs_canvas(theme):
-    # No fill: the card sits on GitHub's own page colour; the frame is a 1px rule in the profile's tokens.
+def test_box_is_a_hairline_frame_in_the_profile_tokens(theme):
     t = tokens("grond-st")[theme]
     outline = ET.fromstring(render_card(STATS, DAY, theme)).find(f"{SVG}rect")
     assert outline.get("fill") == "none"
@@ -104,131 +112,115 @@ def test_card_is_a_hairline_frame_on_githubs_canvas(theme):
     assert outline.get("rx") == t["radius-box"].removesuffix("px")
 
 
-def test_card_has_no_scripts_external_resources_or_em_dashes():
-    svg = render_card(STATS, DAY, "dark")
-    assert "<script" not in svg
-    assert all(ref.startswith("#") for ref in re.findall(r'href="([^"]*)"', svg))  # only its own glyphs
-    assert "@import" not in svg and "<text" not in svg  # every letter is outlined, no font is needed
-    assert "\u2014" not in svg
+def test_wide_tagline_names_the_registries_and_the_pypi_source_on_one_line():
+    assert texts(render_card(STATS, DAY, "light", 800), "tagline") == [f"Across seven registries. {NOTE}"]
 
 
-def test_wide_card_lists_every_registry_largest_first_in_one_row():
-    found = labels(render_card(STATS, DAY, "light"))
-    assert [t.get("data-text") for t in found] == LARGEST_FIRST  # unknown totals (pub.dev) go last
-    assert len({t.get("y") for t in found}) == 1
-    xs = [float(t.get("data-x")) for t in found]
-    steps = [b - a for a, b in zip(xs, xs[1:])]
-    assert min(steps) > 0 and max(steps) - min(steps) < 0.02  # evenly spaced, left to right (2-decimal rounding)
+def test_narrow_tagline_wraps_after_its_first_sentence():
+    lines = texts(render_card(STATS, DAY, "light", 400), "tagline")
+    assert lines[0] == "Across seven registries."
+    assert " ".join(lines[1:]) == NOTE
 
 
-def test_equal_totals_keep_the_given_order():
-    stats = [RegistryStat("nuget", "NuGet", 10, None), RegistryStat("docker", "Docker", 10, None)]
-    assert [t.get("data-text") for t in labels(render_card(stats, DAY, "light"))] == ["NuGet", "Docker"]
+def test_wide_stamp_shares_the_eyebrow_line_narrow_stamp_sits_under_the_bar():
+    for width, same_line in ((800, True), (400, False)):
+        svg = render_card(STATS, DAY, "light", width)
+        title, foot = runs(svg, "title")[0], runs(svg, "foot")[0]
+        assert (title.get("data-y") == foot.get("data-y")) == same_line
+        if not same_line:
+            bar_y = float(re.search(r'clipPath id="bar"><rect x="[\d.]+" y="([\d.]+)"', svg).group(1))
+            assert float(foot.get("data-y")) > bar_y + BAR_HEIGHT
 
 
-def test_unknown_total_shows_n_a_and_gets_no_bar_segment():
+def test_bar_draws_in_fixed_slot_order_not_by_size():
+    colors = palette("dark")
+    assert [fill for _, _, fill in bar(render_card(STATS, DAY, "dark"))] == [colors[k] for k in SLOT_ORDER]
+
+
+def test_bar_keeps_2px_unfilled_gaps_and_a_thin_height():
+    segments = [(float(x), float(w)) for x, w, _ in bar(render_card(STATS, DAY, "light"))]
+    for (x1, w1), (x2, _) in zip(segments, segments[1:]):
+        assert x2 - (x1 + w1) == pytest.approx(BAR_GAP, abs=0.02)
+    assert 8 <= BAR_HEIGHT <= 10
+
+
+def test_bar_rounds_only_its_outer_ends():
     svg = render_card(STATS, DAY, "light")
-    assert "n/a" in texts(svg) and "+408" in texts(svg)
-    assert palette("light")["pubdev"] not in [fill for _, _, fill in bar(svg)]
+    clip = re.search(r'<clipPath id="bar"><rect [^>]*rx="([\d.]+)"', svg)
+    assert clip and clip.group(1) == tokens("grond-st")["light"]["radius-box"].removesuffix("px")
+    assert len(bar(svg)) == 7  # the segment pattern has no rx: inner ends stay square
 
 
-def test_bar_segments_follow_the_legend_and_use_theme_colours():
-    segments = bar(render_card(STATS, DAY, "dark"))
-    keys = ["pypi", "npm", "crates", "nuget", "docker", "github"]
-    assert [fill for _, _, fill in segments] == [palette("dark")[k] for k in keys]
-    widths = [float(w) for _, w, _ in segments]
-    assert sum(widths) == pytest.approx(800 - 2 * PAD - 5 * 2, abs=0.05)  # full width less padding and 5 gaps
-    assert widths[0] / widths[1] == pytest.approx(812 / 201, rel=0.01)  # PyPI, then npm
+def test_segments_use_true_proportions():
+    widths = [float(w) for _, w, _ in bar(render_card(STATS, DAY, "light"))]
+    assert widths[0] / widths[1] == pytest.approx(46_451 / 25_761, rel=0.01)  # PyPI, then crates.io
+    assert sum(widths) == pytest.approx(800 - 2 * 24 - 6 * BAR_GAP, abs=0.05)
 
 
-def test_top_four_and_others():
-    svg = render_card(STATS, DAY, "light", shown=4, width=540)
-    assert [t.get("data-text") for t in labels(svg)] == ["PyPI", "npm", "crates.io", "NuGet", "Others"]
-    shown = texts(svg)
-    assert "15.8K" in shown  # Docker 15,000 + GitHub 750; pub.dev has no all-time number
-    assert shown.count("+408") == 1  # Others' 30 days: pub.dev is the only one of the three with a number
-    keys = ["pypi", "npm", "crates", "nuget"]
-    assert [fill for _, _, fill in bar(svg)] == [palette("light")[k] for k in keys] + [palette("light")["others"]]
+def test_tiny_segments_are_drawn_at_the_minimum_width():
+    widths = segment_widths([100_000, 10], 500)
+    assert widths[1] == MIN_SEGMENT
+    assert sum(widths) == pytest.approx(500)
 
 
-def test_others_only_appears_when_two_or_more_registries_are_left():
-    five = STATS[:5]
-    assert "Others" not in [t.get("data-text") for t in labels(render_card(five, DAY, "light", shown=4, width=540))]
+def test_registry_without_a_30_day_number_gets_no_segment():
+    stats = [RegistryStat("pypi", "PyPI", 1, 100), RegistryStat("nuget", "NuGet", 5, None)]
+    assert len(bar(render_card(stats, DAY, "light"))) == 1
 
 
-def test_others_with_nothing_known_shows_n_a():
-    stats = STATS[:4] + [RegistryStat("github", "GitHub", None, None), RegistryStat("pubdev", "pub.dev", None, None)]
-    svg = render_card(stats, DAY, "light", shown=4, width=540)
-    assert [t.get("data-text") for t in labels(svg)][-1] == "Others"
-    assert texts(svg)[-2:] == ["n/a", "n/a"]  # Others: all time and 30 days
+def test_box_has_no_scripts_external_resources_live_text_or_em_dashes():
+    svg = render_card(STATS, DAY, "dark")
+    assert "<script" not in svg and "<text" not in svg and "—" not in svg
+    assert all(ref.startswith("#") for ref in re.findall(r'href="([^"]*)"', svg))
 
 
-def test_two_row_legend_fills_rows_left_to_right():
-    found = labels(render_card(STATS, DAY, "light", shown=4, columns=3, width=340))
-    assert [t.get("data-text") for t in found] == ["PyPI", "npm", "crates.io", "NuGet", "Others"]
-    ys = [float(t.get("data-y")) for t in found]
-    assert ys[0] == ys[1] == ys[2] < ys[3] == ys[4]
-    assert found[3].get("data-x") == found[0].get("data-x")
-
-
-@pytest.mark.parametrize("suffix", list(VARIANTS))
-def test_every_variant_leaves_room_for_its_legend(suffix):
-    shown, columns, width = VARIANTS[suffix]
-    root = ET.fromstring(render_card(STATS, DAY, "light", shown, columns, width))
-    assert root.get("width") == str(width)
-    entries = len([g for g in root.iter(f"{SVG}g") if g.get("class") == "label"])
-    # A legend entry's second line holds the total and the 30-day number side by side: about 100px at most.
-    assert (width - 2 * PAD) / (columns or entries) >= 98  # px per legend column at the drawn size
-
-
-def test_card_is_a_thin_strip():
-    root = ET.fromstring(render_card(STATS, DAY, "light"))
-    assert int(root.get("height")) <= 150
-
-
-def test_legend_puts_total_and_30_days_on_one_line():
-    found = runs(render_card(STATS, DAY, "light"))
-    values = [g for g in found if g.get("class") == "value"]
-    deltas = [g for g in found if g.get("class") == "delta"]
-    assert [v.get("data-y") for v in values] == [d.get("data-y") for d in deltas]
-    assert all(float(d.get("data-x")) - float(v.get("data-x")) >= 44 for v, d in zip(values, deltas))
+def test_title_spells_out_every_number_for_screen_readers():
+    title = ET.fromstring(render_card(STATS, DAY, "light")).find(f"{SVG}title").text
+    assert title.startswith("Package downloads in the last 30 days: 86,140.")
+    assert "PyPI 46,451 (without mirrors)" in title and "pub.dev 1,155" in title
+    assert title.index("crates.io") < title.index("npm") < title.index("Docker")  # slot order
+    assert describe([RegistryStat("nuget", "NuGet", 1, None)], None).startswith(
+        "Package downloads in the last 30 days: unknown."
+    )
 
 
 @pytest.mark.parametrize("theme", ["light", "dark"])
-def test_registry_colours_are_the_profile_data_palette_in_slot_order(theme):
-    # Registries usually sort PyPI, crates.io, npm, Docker, NuGet, GitHub: neighbouring slots of data-1 to data-7.
-    assert list(SLOTS.values()) == list(range(1, 8))
+def test_chip_is_a_labelled_legend_key(theme):
     t = tokens("grond-st")[theme]
     colors = palette(theme)
-    assert all(colors[key] == t[f"data-{slot}"] for key, slot in SLOTS.items())
-    assert colors["others"] == t["muted-foreground"]  # neutral, never a data slot
+    for stat in STATS:
+        svg = render_chip(stat, theme)
+        root = ET.fromstring(svg)
+        outline = root.find(f"{SVG}rect")
+        assert outline.get("fill") == "none" and outline.get("stroke") == t["border-strong"]
+        assert outline.get("rx") == t["radius-control"].removesuffix("px")
+        dot = root.find(f"{SVG}circle")  # the only coloured part, about 8px
+        assert dot.get("fill") == colors[stat.key] and float(dot.get("r")) * 2 == pytest.approx(8)
+        assert texts(svg, "label") == [stat.label] and texts(svg, "value") == [format_value(stat.last30)]
+        assert all(g.get("fill") == t["foreground"] for g in runs(svg))  # text colours, never the slot colour
+        assert root.get("height") == str(CHIP_HEIGHT + CHIP_GAP)
+        assert "<script" not in svg and "<text" not in svg
 
 
-def test_legend_shows_each_registrys_total_and_30_days():
-    shown = texts(render_card(STATS, DAY, "light"))
-    for value in ("812K", "+31K", "150K", "+6K", "201K", "+9K", "750", "+408"):
-        assert value in shown
+def test_total_and_chips_round_the_same_way():
+    assert texts(render_card(STATS, DAY, "light"), "big") == [format_count(sum(s.last30 for s in STATS))]
+    assert [texts(render_chip(s, "light"), "value")[0] for s in STATS] == [format_count(s.last30) for s in STATS]
 
 
-def test_zero_total_registry_gets_no_bar_segment_but_stays_in_the_legend():
-    stats = [RegistryStat("pypi", "PyPI", 100, 10), RegistryStat("nuget", "NuGet", 0, None)]
-    svg = render_card(stats, DAY, "light")
-    assert len(bar(svg)) == 1
-    assert "NuGet" in texts(svg)
+def test_registry_slots_are_the_profile_data_palette_in_order():
+    assert list(SLOTS) == SLOT_ORDER and list(SLOTS.values()) == list(range(1, 8))
+    for theme in ("light", "dark"):
+        t, colors = tokens("grond-st")[theme], palette(theme)
+        assert all(colors[key] == t[f"data-{slot}"] for key, slot in SLOTS.items())
 
 
-def test_all_zero_draws_no_bar_and_unknown_30_days():
-    stats = [RegistryStat("docker", "Docker", 0, None), RegistryStat("nuget", "NuGet", 0, None)]
-    svg = render_card(stats, DAY, "light")
-    ET.fromstring(svg)
-    assert bar(svg) == []
-    shown = texts(svg)
-    assert "0" in shown and "n/a" in shown
-
-
-def test_title_describes_full_numbers_for_screen_readers():
-    root = ET.fromstring(render_card(STATS, DAY, "light", shown=4, width=540))
-    title = root.find(f"{SVG}title").text
-    assert title.startswith("Package downloads: 1,200,750 all time, 46,408 in the last 30 days.")
-    assert "Docker 15,000 all time, unknown in the last 30 days" in title  # folded entries are still named
-    assert "pub.dev unknown all time, 408 in the last 30 days" in title
+def test_alt_texts_carry_the_numbers():
+    assert box_alt(STATS) == (
+        "Package downloads in the last 30 days: 86.1K across seven registries. "
+        "PyPI counted without mirrors, from pypistats.org."
+    )
+    assert [chip_alt(s) for s in STATS][:2] == [
+        "PyPI: 46.5K downloads in the last 30 days",
+        "crates.io: 25.8K downloads in the last 30 days",
+    ]
+    assert chip_alt(RegistryStat("nuget", "NuGet", 1, None)) == "NuGet: no 30-day number yet"

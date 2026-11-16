@@ -53,22 +53,21 @@ class Group:
 GROUPS = (
     Group(
         "deriva", "deriva", "Architecture", "Deriva",
-        "ArchiMate model derivation.",
+        "ArchiMate model derivation. A research project.",
         repos("StevenBtw", "deriva"), "https://deriva.dev", "stix-500", "stix", "plex-mono",
     ),
     Group(
-        "grafeo", "grafeo", "Graph (and vector) database", "Grafeo",
-        "An embeddable graph database, with a server, a browser build, a benchmark and wire protocols.",
+        "grafeo", "grafeo", "Embedded · server · browser", "Grafeo",
+        "A graph & vector database in Rust, built for speed and low memory use, with bindings for Python, Node.js, Go, C, C# and Dart.",
         repos("GrafeoDB", "grafeo", "grafeo-web", "grafeo-server", "graph-bench", "boltr")
         + (Repo("gwp", "GrafeoDB/gql-wire-protocol"),),
         "https://grafeo.dev", "instrument-500", "instrument", "jetbrains-mono",
     ),
     Group(
-        "grafeo-ai", "grafeo-ai", "Graph (and vector) memory for AI", "Grafeo AI",
+        "grafeo-ai", "grafeo-ai", "Hybrid memory for AI", "Grafeo AI",
         "A memory layer for AI agents, an MCP server and integrations for LangChain and LlamaIndex.",
         repos("GrafeoDB", "grafeo-memory", "grafeo-mcp", "grafeo-langchain", "grafeo-llamaindex"),
-        # Grafeo AI keeps mono uppercase for buttons and navigation, so its eyebrow is set in Instrument Sans.
-        "https://grafeo.ai", "instrument-500", "instrument", "jetbrains-mono", label="instrument", beam=True,
+        "https://grafeo.ai", "instrument-500", "instrument", "jetbrains-mono", beam=True,
     ),
     Group(
         "anywidgets", "anywidgets", "Notebook widgets", "anywidgets",

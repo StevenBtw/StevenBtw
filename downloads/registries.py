@@ -26,6 +26,17 @@ LABELS = {
     "pubdev": "pub.dev",
 }
 
+# Where each registry chip on the profile links: the publisher's page, or the package where there is none.
+PAGES = {
+    "pypi": "https://pypi.org/user/StevenBtw/",
+    "crates": "https://crates.io/users/StevenBtw",
+    "npm": "https://www.npmjs.com/org/grafeo-db",
+    "docker": "https://hub.docker.com/r/grafeo/grafeo-server",
+    "nuget": "https://www.nuget.org/packages/Grafeo",
+    "github": "https://github.com/GrafeoDB/grafeo/releases",
+    "pubdev": "https://pub.dev/packages/grafeo",
+}
+
 # Registries that only publish an all-time total; their 30-day number comes from history snapshots.
 SNAPSHOT_30D = frozenset({"docker", "nuget", "github"})
 
@@ -89,18 +100,22 @@ def last30_window(today: date) -> tuple[date, date]:
 
 
 def fetch_pypi(name: str, today: date, get: GetJson = get_json) -> Counts:
+    """30 days without mirror traffic from pypistats.org, so mirrors syncing a release never count as users.
+
+    The all-time number still comes from pepy.tech, which only reports totals including mirrors (about a third
+    more): it is kept in the history but not shown on the card."""
+    start, end = last30_window(today)
+    daily = get(f"https://pypistats.org/api/packages/{name.lower()}/overall?mirrors=false")["data"]
+    last30 = sum(
+        row["downloads"]
+        for row in daily
+        if row["category"] == "without_mirrors" and start <= date.fromisoformat(row["date"]) <= end
+    )
     key = os.environ.get("PEPY_API_KEY")
     if not key:
         raise FetchError("PEPY_API_KEY is not set")
-    data = get(f"https://api.pepy.tech/api/v2/projects/{name}", {"X-API-Key": key})
-    start, end = last30_window(today)
-    last30 = sum(
-        count
-        for day, versions in data["downloads"].items()
-        if start <= date.fromisoformat(day) <= end
-        for count in versions.values()
-    )
-    return Counts(int(data["total_downloads"]), last30)
+    total = get(f"https://api.pepy.tech/api/v2/projects/{name}", {"X-API-Key": key})["total_downloads"]
+    return Counts(int(total), last30)
 
 
 def fetch_crates(name: str, today: date, get: GetJson = get_json) -> Counts:

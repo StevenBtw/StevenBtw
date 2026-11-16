@@ -42,31 +42,36 @@ def test_last30_window_is_30_days_ending_yesterday():
     assert last30_window(TODAY) == (date(2026, 9, 9), date(2026, 10, 8))
 
 
-def test_pypi_sums_all_versions_inside_the_window(monkeypatch):
+PYPISTATS_SOLVOR = "https://pypistats.org/api/packages/solvor/overall?mirrors=false"
+PEPY_SOLVOR = "https://api.pepy.tech/api/v2/projects/solvor"
+
+
+def test_pypi_30_days_leave_mirrors_out_and_all_time_comes_from_pepy(monkeypatch):
     monkeypatch.setenv("PEPY_API_KEY", "test-key")
     get = fake_get(
         {
-            "https://api.pepy.tech/api/v2/projects/solvor": {
-                "id": "solvor",
-                "total_downloads": 5120,
-                "versions": ["0.4.0", "0.5.0"],
-                "downloads": {
-                    "2026-09-08": {"0.4.0": 7},
-                    "2026-09-09": {"0.4.0": 3, "0.5.0": 10},
-                    "2026-10-08": {"0.5.0": 20},
-                    "2026-10-09": {"0.5.0": 50},
-                },
-            }
+            PYPISTATS_SOLVOR: {
+                "data": [
+                    {"category": "without_mirrors", "date": "2026-09-08", "downloads": 7},  # before the window
+                    {"category": "without_mirrors", "date": "2026-09-09", "downloads": 13},
+                    {"category": "with_mirrors", "date": "2026-09-09", "downloads": 40},  # mirrors never count
+                    {"category": "without_mirrors", "date": "2026-10-08", "downloads": 20},
+                    {"category": "without_mirrors", "date": "2026-10-09", "downloads": 50},  # today, partial
+                ],
+                "package": "solvor",
+                "type": "overall_downloads",
+            },
+            PEPY_SOLVOR: {"id": "solvor", "total_downloads": 5120},
         }
     )
     assert fetch_pypi("solvor", TODAY, get) == Counts(5120, 33)
-    assert get.calls[0][1] == {"X-API-Key": "test-key"}
+    assert get.calls[1] == (PEPY_SOLVOR, {"X-API-Key": "test-key"})
 
 
 def test_pypi_without_api_key_fails(monkeypatch):
     monkeypatch.delenv("PEPY_API_KEY", raising=False)
     with pytest.raises(FetchError, match="PEPY_API_KEY"):
-        fetch_pypi("solvor", TODAY, fake_get({}))
+        fetch_pypi("solvor", TODAY, fake_get({PYPISTATS_SOLVOR: {"data": []}}))
 
 
 def test_crates_adds_extra_downloads_inside_the_window():
