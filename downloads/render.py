@@ -17,7 +17,7 @@ from visuals.type import Typesetter, measure, wrap
 
 MONTHS = ("Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec")
 NUMBERS = ("tnum",)  # tabular figures, so numbers keep their width from week to week
-EYEBROW = "PACKAGE DOWNLOADS · LAST 30 DAYS"
+LABEL = "downloads"  # the README heading above the box says "Package downloads"
 NOTE = "PyPI counted without mirrors, from pypistats.org."
 WORDS = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine"}
 
@@ -103,32 +103,22 @@ def render_card(stats: list[RegistryStat], updated: date, theme: str, width: int
     body_size = 16 if wide else 15
     entries = in_slot_order(stats)
     last30 = _known_sum(s.last30 for s in entries)
-    stamp = f"UPDATED {updated.day} {MONTHS[updated.month - 1].upper()}"
+    stamp = f"LAST 30 DAYS · UPDATED {updated.day} {MONTHS[updated.month - 1].upper()}"
 
-    eyebrow_y = pad + 12
-    name_y = eyebrow_y + 12 + 32
-    parts = [ts.text("plex-mono", EYEBROW, pad, eyebrow_y, 11, muted, tracking=1.4, role="title")]
-    stamp_on_top = measure("plex-mono", EYEBROW, 11, 1.4) + 24 + measure("plex-mono", stamp, 11, 1.4) <= width - 2 * pad
-    if stamp_on_top:
-        parts.append(ts.text("plex-mono", stamp, width - pad, eyebrow_y, 11, muted, "end", 1.4, role="foot"))
-    parts.append(ts.text("hanken-600", format_value(last30), pad, name_y, 32, ink, features=NUMBERS, role="big"))
-
-    # The tagline wraps after its first sentence when it does not fit on one line.
-    first, note = tagline(entries)
-    whole = f"{first} {note}".strip()
-    avail = width - 2 * pad
-    if measure("hanken", whole, body_size) <= avail:
-        lines = [whole]
-    else:
-        lines = wrap("hanken", first, body_size, avail) + (wrap("hanken", note, body_size, avail) if note else [])
-    y = name_y + 28
-    for line in lines:
-        parts.append(ts.text("hanken", line, pad, y, body_size, muted, role="tagline"))
-        y += body_size * 1.5
-    bar_y = y - body_size * 1.5 + 18
+    # One line: the total with "package downloads" beside it, the period and date in mono on the right.
+    number = format_value(last30)
+    line_y = pad + 26
+    parts = [ts.text("hanken-600", number, pad, line_y, 32, ink, features=NUMBERS, role="big")]
+    label_x = pad + measure("hanken-600", number, 32, features=NUMBERS) + 10
+    parts.append(ts.text("hanken", LABEL, label_x, line_y, body_size, muted, role="label"))
+    label_end = label_x + measure("hanken", LABEL, body_size)
+    stamp_inline = label_end + 24 + measure("plex-mono", stamp, 11, 1.4) <= width - pad
+    if stamp_inline:
+        parts.append(ts.text("plex-mono", stamp, width - pad, line_y, 11, muted, "end", 1.4, role="foot"))
+    bar_y = line_y + 18
     parts.append(_bar(entries, colors, pad, bar_y, width - 2 * pad))
     height = bar_y + BAR_HEIGHT + pad
-    if not stamp_on_top:  # narrow: the date moves under the bar
+    if not stamp_inline:  # narrow: the period and date move under the bar
         parts.append(ts.text("plex-mono", stamp, pad, height + 2, 11, muted, tracking=1.4, role="foot"))
         height += 2 + pad - 6
     height = round(height)

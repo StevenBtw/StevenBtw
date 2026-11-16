@@ -9,9 +9,8 @@ from downloads.render import (
     box_alt,
     chip_alt,
     BAR_HEIGHT,
-    EYEBROW,
+    LABEL,
     MIN_SEGMENT,
-    NOTE,
     SLOTS,
     VARIANTS,
     RegistryStat,
@@ -88,13 +87,20 @@ def test_format_value():
 
 @pytest.mark.parametrize("theme", ["light", "dark"])
 @pytest.mark.parametrize("width", VARIANTS.values())
-def test_box_leads_with_the_30_day_total(theme, width):
+def test_box_is_one_line_the_total_with_its_label_then_the_bar(theme, width):
     svg = render_card(STATS, DAY, theme, width)
     assert ET.fromstring(svg).get("width") == str(width)
-    assert texts(svg, "title") == [EYEBROW]
     assert texts(svg, "big") == ["86.1K"]  # 86,140: every registry has a 30-day number
-    assert texts(svg, "foot") == ["UPDATED 16 NOV"]
-    assert "n/a" not in texts(svg)  # no all-time column, so no hole in it
+    assert texts(svg, "label") == [LABEL]
+    assert texts(svg, "foot") == ["LAST 30 DAYS · UPDATED 16 NOV"]
+    big, label = runs(svg, "big")[0], runs(svg, "label")[0]
+    assert big.get("data-y") == label.get("data-y") and float(label.get("data-x")) > float(big.get("data-x"))
+    assert "n/a" not in texts(svg) and not texts(svg, "tagline")  # no all-time column, no tagline
+
+
+def test_box_is_compact():
+    assert int(ET.fromstring(render_card(STATS, DAY, "light", 800)).get("height")) <= 104
+    assert int(ET.fromstring(render_card(STATS, DAY, "light", 400)).get("height")) <= 112
 
 
 def test_box_never_shows_all_time_numbers():
@@ -112,21 +118,11 @@ def test_box_is_a_hairline_frame_in_the_profile_tokens(theme):
     assert outline.get("rx") == t["radius-box"].removesuffix("px")
 
 
-def test_wide_tagline_names_the_registries_and_the_pypi_source_on_one_line():
-    assert texts(render_card(STATS, DAY, "light", 800), "tagline") == [f"Across seven registries. {NOTE}"]
-
-
-def test_narrow_tagline_wraps_after_its_first_sentence():
-    lines = texts(render_card(STATS, DAY, "light", 400), "tagline")
-    assert lines[0] == "Across seven registries."
-    assert " ".join(lines[1:]) == NOTE
-
-
-def test_wide_stamp_shares_the_eyebrow_line_narrow_stamp_sits_under_the_bar():
+def test_wide_stamp_shares_the_number_line_narrow_stamp_sits_under_the_bar():
     for width, same_line in ((800, True), (400, False)):
         svg = render_card(STATS, DAY, "light", width)
-        title, foot = runs(svg, "title")[0], runs(svg, "foot")[0]
-        assert (title.get("data-y") == foot.get("data-y")) == same_line
+        big, foot = runs(svg, "big")[0], runs(svg, "foot")[0]
+        assert (big.get("data-y") == foot.get("data-y")) == same_line
         if not same_line:
             bar_y = float(re.search(r'clipPath id="bar"><rect x="[\d.]+" y="([\d.]+)"', svg).group(1))
             assert float(foot.get("data-y")) > bar_y + BAR_HEIGHT

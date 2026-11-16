@@ -130,12 +130,13 @@ def test_banners_link_to_websites_and_chips_to_repos():
 def test_downloads_box_closes_the_page_with_a_linked_chip_per_registry():
     from downloads.registries import PAGES
     from downloads.render import SLOTS
-    from visuals.readme import DOWNLOADS_END, DOWNLOADS_START
+    from visuals.readme import DOWNLOADS_END, DOWNLOADS_START, END
 
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     block = readme.split(DOWNLOADS_START, 1)[1].split(DOWNLOADS_END, 1)[0]
-    assert readme.index("assets/bonsai-light.svg") < readme.index(DOWNLOADS_START)  # under the bonsai, last
-    assert readme.rstrip().endswith(DOWNLOADS_END)
+    # Order: Projects, then Package downloads, then gitbonsai, each under its own heading.
+    order = [readme.index(m) for m in (END, "## Package downloads", DOWNLOADS_START, DOWNLOADS_END, "## gitbonsai", "assets/bonsai-light.svg")]
+    assert order == sorted(order)
     hrefs = re.findall(r'<a href="([^"]+)"><picture><source [^>]*srcset="assets/registry-', block)
     assert hrefs == [PAGES[key] for key in SLOTS]  # chips in slot order, each to its registry page
     assert "<a href" not in block.split("<p>", 1)[0]  # the box itself is no link
