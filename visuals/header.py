@@ -11,7 +11,7 @@ NOW = (
     "Tinkering with architecture model derivation, the occasional ethical hacking "
     "and maintaining a graph database ecosystem."
 )
-SUBTITLE = "Recreational programmer. I code for fun, to build and learn."
+SUBTITLE = "Recreational programmer. I code to learn, build and have fun."
 TITLE = "Hi there! I’m Steven, by the way."
 DESC = f"{SUBTITLE} My personal GitHub for side projects, research and experiments. Now: {NOW}"
 
@@ -40,7 +40,11 @@ def render_header(theme: str, width: int = 800) -> str:
     y -= size * 1.12  # back to the greeting's last baseline
     sub_size, sub_leading = (17, 25) if wide else (15, 22)
     y += sub_size + 14
-    for line in wrap("hanken", SUBTITLE, sub_size, width):
+    # Too long for one line: break after the first sentence, not before a lone last word.
+    fits = measure("hanken", SUBTITLE, sub_size) <= width
+    first, _, rest = SUBTITLE.partition(". ")
+    sub_lines = [SUBTITLE] if fits else wrap("hanken", first + ".", sub_size, width) + wrap("hanken", rest, sub_size, width)
+    for line in sub_lines:
         parts.append(ts.text("hanken", line, 0, y, sub_size, muted, role="subtitle"))
         y += sub_leading
     y += 22 - sub_leading

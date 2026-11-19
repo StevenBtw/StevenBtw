@@ -59,7 +59,7 @@ GROUPS = (
     Group(
         "grafeo", "grafeo", "Embedded · server · browser", "Grafeo",
         "A graph & vector database in Rust, built for speed and low memory use, with bindings for Python, Node.js, Go, C, C# and Dart.",
-        repos("GrafeoDB", "grafeo", "grafeo-web", "grafeo-server", "graph-bench", "boltr")
+        repos("GrafeoDB", "grafeo", "grafeo-web", "grafeo-server", "grafeo-cuda", "graph-bench", "boltr")
         + (Repo("gwp", "GrafeoDB/gql-wire-protocol"),),
         "https://grafeo.dev", "instrument-500", "instrument", "jetbrains-mono",
     ),

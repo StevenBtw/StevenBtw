@@ -6,7 +6,7 @@
   <source media="(max-width: 556px) and (prefers-color-scheme: dark), (min-width: 768px) and (max-width: 844px) and (prefers-color-scheme: dark)" srcset="assets/header-narrow-dark.svg">
   <source media="(max-width: 556px), (min-width: 768px) and (max-width: 844px)" srcset="assets/header-narrow-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="assets/header-dark.svg">
-  <img alt="Hi there! I'm Steven, by the way. Recreational programmer. I code for fun, to build and learn. This is my personal GitHub for side projects, research and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and maintaining a graph database ecosystem." src="assets/header-light.svg" width="100%">
+  <img alt="Hi there! I'm Steven, by the way. Recreational programmer. I code to learn, build and have fun. This is my personal GitHub for side projects, research and experiments. Currently tinkering with architecture model derivation, the occasional ethical hacking and maintaining a graph database ecosystem." src="assets/header-light.svg" width="100%">
 </picture>
 
 ## Projects
@@ -36,6 +36,7 @@
 <a href="https://github.com/GrafeoDB/grafeo"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-grafeo-dark.svg"><img alt="grafeo" src="assets/repo-grafeo-light.svg"></picture></a>
 <a href="https://github.com/GrafeoDB/grafeo-web"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-grafeo-web-dark.svg"><img alt="grafeo-web" src="assets/repo-grafeo-web-light.svg"></picture></a>
 <a href="https://github.com/GrafeoDB/grafeo-server"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-grafeo-server-dark.svg"><img alt="grafeo-server" src="assets/repo-grafeo-server-light.svg"></picture></a>
+<a href="https://github.com/GrafeoDB/grafeo-cuda"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-grafeo-cuda-dark.svg"><img alt="grafeo-cuda" src="assets/repo-grafeo-cuda-light.svg"></picture></a>
 <a href="https://github.com/GrafeoDB/graph-bench"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-graph-bench-dark.svg"><img alt="graph-bench" src="assets/repo-graph-bench-light.svg"></picture></a>
 <a href="https://github.com/GrafeoDB/boltr"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-boltr-dark.svg"><img alt="boltr" src="assets/repo-boltr-light.svg"></picture></a>
 <a href="https://github.com/GrafeoDB/gql-wire-protocol"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/repo-gwp-dark.svg"><img alt="gwp" src="assets/repo-gwp-light.svg"></picture></a>
