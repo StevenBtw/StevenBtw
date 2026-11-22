@@ -85,7 +85,7 @@
 
 ## Package downloads
 
-<!-- downloads:start (written weekly by: uv run python -m downloads) -->
+<!-- downloads:start (written daily by: uv run python -m downloads) -->
 <picture>
   <source media="(max-width: 556px) and (prefers-color-scheme: dark), (min-width: 768px) and (max-width: 844px) and (prefers-color-scheme: dark)" srcset="assets/downloads-narrow-dark.svg">
   <source media="(max-width: 556px), (min-width: 768px) and (max-width: 844px)" srcset="assets/downloads-narrow-light.svg">
