@@ -90,15 +90,15 @@
   <source media="(max-width: 556px) and (prefers-color-scheme: dark), (min-width: 768px) and (max-width: 844px) and (prefers-color-scheme: dark)" srcset="assets/downloads-narrow-dark.svg">
   <source media="(max-width: 556px), (min-width: 768px) and (max-width: 844px)" srcset="assets/downloads-narrow-light.svg">
   <source media="(prefers-color-scheme: dark)" srcset="assets/downloads-dark.svg">
-  <img alt="Package downloads in the last 30 days: 87.5K across seven registries. PyPI counted without mirrors, from pypistats.org." src="assets/downloads-light.svg" width="100%">
+  <img alt="Package downloads in the last 30 days: 86.9K across seven registries. PyPI counted without mirrors, from pypistats.org." src="assets/downloads-light.svg" width="100%">
 </picture>
 <p>
-<a href="https://pypi.org/user/StevenBtw/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-pypi-dark.svg"><img alt="PyPI: 44.6K downloads in the last 30 days" src="assets/registry-pypi-light.svg"></picture></a>
-<a href="https://crates.io/users/StevenBtw"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-crates-dark.svg"><img alt="crates.io: 28.4K downloads in the last 30 days" src="assets/registry-crates-light.svg"></picture></a>
-<a href="https://www.npmjs.com/org/grafeo-db"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-npm-dark.svg"><img alt="npm: 9.4K downloads in the last 30 days" src="assets/registry-npm-light.svg"></picture></a>
-<a href="https://hub.docker.com/r/grafeo/grafeo-server"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-docker-dark.svg"><img alt="Docker: 2.7K downloads in the last 30 days" src="assets/registry-docker-light.svg"></picture></a>
-<a href="https://www.nuget.org/packages/Grafeo"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-nuget-dark.svg"><img alt="NuGet: 626 downloads in the last 30 days" src="assets/registry-nuget-light.svg"></picture></a>
-<a href="https://github.com/GrafeoDB/grafeo/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-github-dark.svg"><img alt="GitHub: 552 downloads in the last 30 days" src="assets/registry-github-light.svg"></picture></a>
+<a href="https://pypi.org/user/StevenBtw/"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-pypi-dark.svg"><img alt="PyPI: 43.6K downloads in the last 30 days" src="assets/registry-pypi-light.svg"></picture></a>
+<a href="https://crates.io/users/StevenBtw"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-crates-dark.svg"><img alt="crates.io: 29K downloads in the last 30 days" src="assets/registry-crates-light.svg"></picture></a>
+<a href="https://www.npmjs.com/org/grafeo-db"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-npm-dark.svg"><img alt="npm: 9.2K downloads in the last 30 days" src="assets/registry-npm-light.svg"></picture></a>
+<a href="https://hub.docker.com/r/grafeo/grafeo-server"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-docker-dark.svg"><img alt="Docker: 2.6K downloads in the last 30 days" src="assets/registry-docker-light.svg"></picture></a>
+<a href="https://www.nuget.org/packages/Grafeo"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-nuget-dark.svg"><img alt="NuGet: 552 downloads in the last 30 days" src="assets/registry-nuget-light.svg"></picture></a>
+<a href="https://github.com/GrafeoDB/grafeo/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-github-dark.svg"><img alt="GitHub: 561 downloads in the last 30 days" src="assets/registry-github-light.svg"></picture></a>
 <a href="https://pub.dev/packages/grafeo"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-pubdev-dark.svg"><img alt="pub.dev: 1.2K downloads in the last 30 days" src="assets/registry-pubdev-light.svg"></picture></a>
 </p>
 <!-- downloads:end -->
