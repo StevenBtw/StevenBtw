@@ -98,7 +98,7 @@
 <a href="https://www.npmjs.com/org/grafeo-db"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-npm-dark.svg"><img alt="npm: 8.5K downloads in the last 30 days" src="assets/registry-npm-light.svg"></picture></a>
 <a href="https://hub.docker.com/r/grafeo/grafeo-server"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-docker-dark.svg"><img alt="Docker: 2.6K downloads in the last 30 days" src="assets/registry-docker-light.svg"></picture></a>
 <a href="https://www.nuget.org/packages/Grafeo"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-nuget-dark.svg"><img alt="NuGet: 479 downloads in the last 30 days" src="assets/registry-nuget-light.svg"></picture></a>
-<a href="https://github.com/GrafeoDB/grafeo/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-github-dark.svg"><img alt="GitHub: 563 downloads in the last 30 days" src="assets/registry-github-light.svg"></picture></a>
+<a href="https://github.com/GrafeoDB/grafeo/releases"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-github-dark.svg"><img alt="GitHub: 568 downloads in the last 30 days" src="assets/registry-github-light.svg"></picture></a>
 <a href="https://pub.dev/packages/grafeo"><picture><source media="(prefers-color-scheme: dark)" srcset="assets/registry-pubdev-dark.svg"><img alt="pub.dev: 1.2K downloads in the last 30 days" src="assets/registry-pubdev-light.svg"></picture></a>
 </p>
 <!-- downloads:end -->
